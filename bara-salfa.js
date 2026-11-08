@@ -1,6 +1,7 @@
 /* لعبة برا السالفة - تعتمد على app.js (S, beep, vib, toast, modal, ic, esc, addPoints) */
 (() => {
 P.phone = '<rect x="7" y="2" width="10" height="20" rx="2"/><path d="M11 18h2"/>';
+P.edit = '<path d="M4 20h4L19 9l-4-4L4 16zM13 7l4 4"/>';
 const WORDS = {
  'أماكن':[['مطار',['محطة قطار','ميناء','فندق']],['مستشفى',['صيدلية','عيادة','مدرسة']],['مدرسة',['جامعة','روضة','مكتبة']],['شاطئ',['مسبح','جزيرة','منتجع']],['سوق',['مول','متجر','بقالة']],['ملعب',['صالة رياضية','مضمار','حديقة']]],
  'مهن':[['طبيب',['ممرض','صيدلي','جراح']],['معلم',['مدرب','أستاذ','مربية']],['طيار',['مضيف','قبطان','سائق']],['طباخ',['خباز','نادل','جزار']],['شرطي',['حارس','قاضٍ','محقق']],['مهندس',['مقاول','فني','نجار']]],
@@ -9,7 +10,10 @@ const WORDS = {
  'أشياء':[['مفتاح',['قفل','باب','سلسلة']],['ساعة',['منبه','هاتف','سوار']],['نظارة',['عدسة','قبعة','قلم']],['مظلة',['معطف','حذاء','قبعة']],['سرير',['وسادة','أريكة','بطانية']],['مرآة',['نافذة','صورة','لوحة']]],
  'عام':[['رمضان',['عيد','حج','مسجد']],['زواج',['خطوبة','عرس','حفلة']],['سفر',['رحلة','إجازة','سياحة']],['مطر',['ثلج','غيم','رعد']],['كرة القدم',['كرة السلة','تنس','سباحة']],['امتحان',['واجب','اختبار','مدرسة']]]
 };
-const CATS = Object.keys(WORDS), cfg = {cat:'أماكن', out:1, timer:0, prob:0};
+// القوائم (الافتراضية تُنسخ مرة واحدة إلى S.bsLists لتصبح قابلة للتعديل)
+const DEF = Object.keys(WORDS).map((n, i) => ({id: 'd' + i, name: n, fav: 0, words: WORDS[n]}));
+const lists = () => { if (!S.bsLists) { S.bsLists = JSON.parse(JSON.stringify(DEF)); save(); } return S.bsLists; };
+const cfg = {cat:'d0', out:1, timer:0, prob:0};
 let R, bs, tm, gcb, gch, tp = 0, tt;
 const sh = a => { a = [...a]; for (let i = a.length - 1; i > 0; i--) { const j = Math.random() * (i + 1) | 0; [a[i], a[j]] = [a[j], a[i]]; } return a; };
 const rnd = a => a[Math.random() * a.length | 0];
@@ -32,15 +36,20 @@ st.textContent = `#bs{position:fixed;inset:0;z-index:15;background:var(--bg);ove
 .tm{font-size:2.4rem;font-weight:900;text-align:center;margin:6px 0;font-variant-numeric:tabular-nums}
 .ord{display:flex;align-items:center;gap:10px;padding:7px 0;font-weight:700}.ord span{width:30px;height:30px;border-radius:50%;background:var(--bd);display:grid;place-items:center}.ord em{margin-inline-start:auto;font-style:normal;color:var(--ic)}
 #bs .btn{margin-top:10px}.btn:disabled{opacity:.5}
-#bs input[type=range]{padding:0;border:0;width:100%;accent-color:var(--ic)}`;
+#bs input[type=range]{padding:0;border:0;width:100%;accent-color:var(--ic)}
+.li2{display:flex;align-items:center;gap:6px;padding:12px 16px}.li2 b{flex:1}.li2 small{color:var(--mut)}
+.fv{background:none;border:0;color:var(--mut);padding:6px;cursor:pointer}.fv.on{color:#e5484d}.fv.on svg{fill:currentColor}
+.act{margin-inline-start:auto;display:flex}.ord small{color:var(--mut);font-weight:600}`;
 document.head.appendChild(st);
 const B = {};
 const put = (t, b) => { clearInterval(tm); bs.innerHTML = `<div class="w"><div class="bt"><b>${t}</b><button class="xb" data-b="x" aria-label="خروج">${ic('x')}</button></div>${b}</div>`; bs.scrollTop = 0; };
 
 // 1) إعداد الجولة
 function setup() {
+  const ls = [...lists()].sort((a, b) => b.fav - a.fav); if (!ls.some(l => l.id === cfg.cat) && ls[0]) cfg.cat = ls[0].id;
   const ch = (v, k, l) => `<button class="chip ${cfg[k] === v ? 'on' : ''}" data-b="cfg" data-v="${k}|${v}">${l}</button>`;
-  put('برا السالفة', `<div class="sec"><h4>فئة الكلمات</h4><div class="chips">${CATS.map(c => ch(c, 'cat', c)).join('')}</div></div>
+  put('برا السالفة', `<div class="row"><button class="btn ghost" data-b="lists">قوائمي</button><button class="btn ghost" data-b="res">نتائج اللعبة</button></div>
+  <div class="sec" style="margin-top:14px"><h4>القائمة</h4><div class="chips">${ls.map(l => ch(l.id, 'cat', esc(l.name) + ' (' + l.words.length + ')')).join('')}</div></div>
   <div class="sec"><h4>عدد من هم برا السالفة</h4><div class="chips">${ch(1, 'out', '1')}${ch(2, 'out', '2')}</div></div>
   <div class="sec"><h4>مؤقت الأسئلة</h4><div class="chips">${[[0,'بدون'],[2,'2 د'],[3,'3 د'],[5,'5 د'],[7,'7 د']].map(([v, l]) => ch(v, 'timer', l)).join('')}</div></div>
   <div class="sec"><h4>احتمال جولة بدون برا السالفة: <span id="pv">${cfg.prob}</span>%</h4><input type="range" min="0" max="50" step="5" value="${cfg.prob}" data-b="prob"></div>
@@ -49,8 +58,8 @@ function setup() {
 B.cfg = (val, el) => { const [k, v] = val.split('|'); cfg[k] = k === 'cat' ? v : +v; el.parentNode.querySelectorAll('.chip').forEach(c => c.classList.toggle('on', c === el)); };
 B.go = () => {
   const pl = [...S.names]; if (pl.length < 3) return toast('تحتاج 3 لاعبين على الأقل');
-  const [word, close] = rnd(WORDS[cfg.cat]), vk = Math.min(cfg.out, pl.length - 2), none = Math.random() * 100 < cfg.prob;
-  R = {pl, word, close, cat: cfg.cat, vk, none, outs: none ? [] : sh(pl).slice(0, vk), order: sh(pl), i: 0, votes: {}, vi: 0};
+  const L = lists().find(l => l.id === cfg.cat); if (!L || !L.words.length) return toast('اختر قائمة فيها كلمات'); const [word, close] = rnd(L.words), vk = Math.min(cfg.out, pl.length - 2), none = Math.random() * 100 < cfg.prob;
+  R = {pl, word, close, cat: L.name, pool: L.words, vk, none, outs: none ? [] : sh(pl).slice(0, vk), order: sh(pl), i: 0, votes: {}, vi: 0};
   deal();
 };
 
@@ -124,8 +133,8 @@ function guessNext() {
   if (R.gi >= R.gs.length) return result();
   const g = R.gs[R.gi];
   gate('التخمين الأخير', g, `أنا ${esc(g)} – أخمّن`, () => {
-    const rest = WORDS[R.cat].map(w => w[0]).filter(w => w !== R.word && !R.close.includes(w));
-    put('خمّن الكلمة', `<p class="hint">${esc(g)}، تم كشفك! ما الكلمة السرية؟</p>${sh([R.word, ...R.close, ...sh(rest).slice(0, 2)]).map(w => `<button class="opt" data-b="gs" data-v="${esc(w)}">${esc(w)}</button>`).join('')}<button class="btn ghost" data-b="gs" data-v="">تخطّى – ما أريد أخمن</button>`);
+    const base = [R.word, ...R.close], rest = sh(R.pool.map(w => w[0]).filter(w => !base.includes(w))), more = sh(Object.values(WORDS).flat().map(w => w[0]).filter(w => !base.includes(w) && !rest.includes(w))), opts = sh([...base, ...[...rest, ...more].slice(0, 6 - base.length)]);
+    put('خمّن الكلمة', `<p class="hint">${esc(g)}، تم كشفك! ما الكلمة السرية؟</p>${opts.map(w => `<button class="opt" data-b="gs" data-v="${esc(w)}">${esc(w)}</button>`).join('')}<button class="btn ghost" data-b="gs" data-v="">تخطّى – ما أريد أخمن</button>`);
   }, 0, `<p class="hint">تم كشف ${esc(g)}</p>`);
 }
 B.gs = v => { if (v === R.word) R.right.push(R.gs[R.gi]); R.gi++; guessNext(); };
@@ -138,6 +147,7 @@ function result() {
     if (win) R.pl.filter(x => !out.includes(x)).forEach(x => pts[x] = 1);
   }
   Object.entries(pts).forEach(([n, k]) => addPoints(n, k));
+  R.pl.forEach(x => gameRes.add('bara', x, pts[x] || 0)); gameRes.round('bara');
   const rows = Object.entries(pts);
   put('النتيجة', `<h2>${R.none ? 'جولة بدون برا السالفة' : win ? 'تم كشفه!' : 'التمويه نجح!'}</h2>
   <div class="sec"><p class="hint">الكلمة السرية (${esc(R.cat)})</p><div class="big" style="margin:0">${esc(R.word)}</div></div>
@@ -150,12 +160,67 @@ function result() {
 B.again = setup;
 B.x = () => { clearInterval(tm); R = null; bs.style.display = 'none'; };
 
+// ===== قوائمي: إنشاء وتسمية وتعديل (كلمات + 3 مقاربات اختيارية) =====
+const parse = s => s.split(/[،,\n]/).map(x => x.trim()).filter(Boolean).slice(0, 3);
+const find = id => lists().find(l => l.id === id);
+const twice = (el, m, fn) => { if (!el.dataset.c) { el.dataset.c = 1; toast(m); setTimeout(() => el.dataset.c = '', 3000); } else fn(); };
+function listsScreen() {
+  const ls = [...lists()].sort((a, b) => b.fav - a.fav);
+  put('قوائمي', `<div class="sec"><h4>إنشاء قائمة جديدة</h4><div class="row"><input id="ln" maxlength="20" placeholder="اسم القائمة"><button class="btn add" data-b="mk">إنشاء</button></div></div>
+  ${ls.map(l => `<div class="sec li2"><b>${esc(l.name)}</b><small>${l.words.length} كلمة</small>
+    <button class="fv ${l.fav ? 'on' : ''}" data-b="lfav" data-v="${l.id}" aria-label="المفضلة">${ic('heart')}</button>
+    <button class="fv" data-b="le" data-v="${l.id}" aria-label="تعديل">${ic('edit')}</button>
+    <button class="fv" data-b="ld" data-v="${l.id}" aria-label="حذف">${ic('x')}</button></div>`).join('')}
+  <button class="btn ghost" data-b="lrs">استعادة القوائم الافتراضية</button><button class="btn ghost" data-b="home">رجوع</button>`);
+}
+function editor(id, k = -1) {
+  const l = find(id); if (!l) return listsScreen();
+  const w = k >= 0 ? l.words[k] : ['', []];
+  put('تعديل القائمة', `<div class="sec"><h4>اسم القائمة</h4><input id="rn" style="width:100%" value="${esc(l.name)}" maxlength="20" data-b="ren" data-v="${id}"></div>
+  <div class="sec"><h4>${k >= 0 ? 'تعديل الكلمة' : 'إضافة كلمة'}</h4>
+    <input id="wn" style="width:100%;margin-bottom:8px" value="${esc(w[0])}" maxlength="24" placeholder="الكلمة">
+    <input id="wc" style="width:100%;margin-bottom:10px" value="${esc(w[1].join('، '))}" placeholder="حتى 3 كلمات مقاربة، افصل بفاصلة (اختياري)">
+    <button class="btn" data-b="ws" data-v="${id}|${k}">${k >= 0 ? 'حفظ التعديل' : 'إضافة'}</button></div>
+  <div class="sec"><h4>الكلمات (${l.words.length})</h4>${l.words.map((x, i) => `<div class="ord">${esc(x[0])}<small>${x[1].map(esc).join('، ')}</small><div class="act"><button class="fv" data-b="we" data-v="${id}|${i}" aria-label="تعديل">${ic('edit')}</button><button class="fv" data-b="wd" data-v="${id}|${i}" aria-label="حذف">${ic('x')}</button></div></div>`).join('') || '<p class="hint">القائمة فارغة، أضف كلمات</p>'}</div>
+  <button class="btn ghost" data-b="lists">رجوع للقوائم</button>`);
+}
+B.lists = listsScreen; B.home = setup;
+B.mk = () => {
+  const n = $('#ln').value.trim(); if (!n) return toast('اكتب اسم القائمة');
+  if (lists().some(l => l.name === n)) return toast('الاسم مستعمل');
+  const l = {id: 'u' + Date.now(), name: n, fav: 0, words: []}; lists().push(l); save(); editor(l.id);
+};
+B.le = id => editor(id);
+B.lfav = id => { const l = find(id); l.fav = l.fav ? 0 : 1; save(); listsScreen(); };
+B.ld = (id, el) => twice(el, 'اضغط مرة أخرى لحذف القائمة', () => { S.bsLists = lists().filter(l => l.id !== id); save(); listsScreen(); });
+B.lrs = () => { DEF.forEach(d => { if (!find(d.id)) lists().push(JSON.parse(JSON.stringify(d))); }); save(); listsScreen(); toast('تمت استعادة الافتراضية'); };
+B.ws = v => {
+  const [id, k] = v.split('|'), i = +k, l = find(id), w = $('#wn').value.trim();
+  if (!w) return toast('اكتب الكلمة');
+  if (l.words.some((x, j) => j !== i && x[0] === w)) return toast('الكلمة موجودة مسبقاً');
+  const it = [w, parse($('#wc').value)]; i >= 0 ? l.words[i] = it : l.words.push(it); save(); editor(id);
+};
+B.we = v => { const [id, k] = v.split('|'); editor(id, +k); };
+B.wd = v => { const [id, k] = v.split('|'); find(id).words.splice(+k, 1); save(); editor(id); };
+
+// ===== نتائج خاصة بهذه اللعبة فقط (منفصلة عن النتائج العامة) =====
+function resScreen() {
+  const r = gameRes.get('bara'), n = Object.keys(r.pts).sort((a, b) => r.pts[b] - r.pts[a]);
+  put('نتائج برا السالفة', `<p class="hint">عدد الجولات: ${r.rounds}</p>${n.length
+    ? `<div class="sec"><table><tr><th>المركز</th><th>اللاعب</th><th>النقاط</th></tr>${n.map((x, i) => `<tr><td>${i + 1}</td><td>${esc(x)}</td><td>${r.pts[x]}</td></tr>`).join('')}</table></div>`
+    : '<p class="hint">لا توجد نتائج بعد، العب جولة أولاً</p>'}
+  <button class="btn danger" data-b="rr">تصفير نتائج هذه اللعبة</button><button class="btn ghost" data-b="home">رجوع</button>`);
+}
+B.res = resScreen;
+B.rr = (v, el) => twice(el, 'اضغط مرة أخرى لتصفير النتائج', () => { gameRes.reset('bara'); resScreen(); });
+
 // نقطة الدخول التي يستدعيها app.js
 window.openGame = id => {
   if (id !== 'bara') return toast('قريباً');
   if (!bs) {
     bs = document.createElement('div'); bs.id = 'bs'; document.body.appendChild(bs);
     bs.addEventListener('click', e => { const el = e.target.closest('[data-b]'); if (!el) return; beep(600); vib(10); if (B[el.dataset.b]) B[el.dataset.b](el.dataset.v, el); });
+    bs.addEventListener('change', e => { if (e.target.dataset.b === 'ren') { const l = lists().find(x => x.id === e.target.dataset.v), n = e.target.value.trim(); if (l && n) { l.name = n; save(); toast('تم حفظ الاسم'); } } });
     bs.addEventListener('input', e => { if (e.target.dataset.b === 'prob') { cfg.prob = +e.target.value; $('#pv').textContent = cfg.prob; } });
   }
   bs.style.display = 'block'; setup();

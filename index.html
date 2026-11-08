@@ -279,6 +279,13 @@ document.addEventListener('click', e => {
 });
 document.addEventListener('keydown', e => { if (e.key === 'Enter' && e.target.id === 'nm') A.add(); });
 
+// نتائج خاصة بكل لعبة: S.g[id] = {pts, rounds} (منفصلة عن النتائج العامة). كل لعبة جديدة تستعمل gameRes بمعرّفها
+window.gameRes = {
+  get: id => { S.g = S.g || {}; return S.g[id] = S.g[id] || {pts: {}, rounds: 0}; },
+  add: (id, name, k) => { const r = gameRes.get(id); r.pts[name] = (r.pts[name] || 0) + k; save(); },
+  round: id => { gameRes.get(id).rounds++; save(); },
+  reset: id => { gameRes.get(id); S.g[id] = {pts: {}, rounds: 0}; save(); }
+};
 // البداية
 $('header').innerHTML = `<h1>ألعاب جماعية</h1><button data-a="settings" aria-label="الإعدادات">${ic('set')}</button>`;
 $('nav').innerHTML = [['res','cup','النتائج','results'], ['games','home','قائمة الألعاب','tab'], ['names','users','تعديل الأسماء','tab']]
