@@ -757,7 +757,7 @@ function play(i) {
   M.b[i] = s; q.push(i); M.n++;
   if (q.length > 3) { gone = q.shift(); ghost(gone, s); M.b[gone] = ''; }
   const line = WL.find(l => l.every(k => M.b[k] === s));
-  snd('put', s); if (gone >= 0) snd('gone');
+  snd('put', s);
   if (line || M.n >= 20) return finish(line ? s : null, line, i, gone);
   M.t = s === 'X' ? 'O' : 'X'; upd(i, gone, M.pl[s]);
   vib(gone >= 0 ? [20, 30, 20] : 15);
