@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>ألعاب جماعية</title>
+<meta name="theme-color" content="#6D4AFF">
+<link rel="manifest" href="./manifest.json">
+<link rel="icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MTIgNTEyIiB4bWxuczpjMnBhPSJodHRwOi8vYzJwYS5vcmcvbWFuaWZlc3QiPjxtZXRhZGF0YT48YzJwYTptYW5pZmVzdD5BQUFXZ21wMWJXSUFBQUFlYW5WdFpHTXljR0VBRVFBUWdBQUFxZ0E0bTNFRFl6SndZUUFBQUJaY2FuVnRZZ0FBQUVkcWRXMWtZekp0WVFBUkFCQ0FBQUNxQURpYmNRTjFjbTQ2WXpKd1lUbzVNemN4WW1VeVlpMDVOakEzTFRReVptWXRZalJqTXkwME56Sm1Nek0xTkRsbFl6UUFBQUFEbDJwMWJXSUFBQUFwYW5WdFpHTXlZWE1BRVFBUWdBQUFxZ0E0bTNFRFl6SndZUzVoYzNObGNuUnBiMjV6QUFBQUFMeHFkVzFpQUFBQVJHcDFiV1JqWW05eUFCRUFFSUFBQUtvQU9KdHhFMk15Y0dFdWFXNW5jbVZrYVdWdWRDNTJNd0FBQUFBWVl6SnphSFlJZGROOElBT3hRazcwTmNxUG5zMEFBQUJ3WTJKdmNxTnBaR002Wm05eWJXRjBiV2x0WVdkbEwzTjJaeXQ0Yld4cWFXNXpkR0Z1WTJWSlJIZ3NlRzF3T21scFpEcGhaalk1TVRCaVlTMWxabVptTFRSalpqRXRPVEpoTVMxbE1UZzRORE01WldSak56UnNjbVZzWVhScGIyNXphR2x3YUhCaGNtVnVkRTltQUFBQjRtcDFiV0lBQUFCQmFuVnRaR05pYjNJQUVRQVFnQUFBcWdBNG0zRVRZekp3WVM1aFkzUnBiMjV6TG5ZeUFBQUFBQmhqTW5Ob1d3Z0RTMTF4WmFDeG85TDVlQ1R4V3dBQUFabGpZbTl5b21kaFkzUnBiMjV6Z3FKbVlXTjBhVzl1YTJNeWNHRXViM0JsYm1Wa2FuQmhjbUZ0WlhSbGNuT2hhMmx1WjNKbFpHbGxiblJ6Z2FKamRYSnNlQzF6Wld4bUkycDFiV0ptUFdNeWNHRXVZWE56WlhKMGFXOXVjeTlqTW5CaExtbHVaM0psWkdsbGJuUXVkak5rYUdGemFGZ2dZbVNDSitSYzdvNFhUMlMvQ0xmVFpOWi82Qkk3WHZ0SnVmSy9lMW5pNXhha1ptRmpkR2x2Ym5nZFkyOXRMbUZ1ZEdoeWIzQnBZeTVqYkdGMVpHVXVjSEp2ZG1sa1pXUnFjR0Z5WVcxbGRHVnljNkY0SDJOdmJTNWhiblJvY205d2FXTXViM0pwWjJsdUxXTnZibVpwWkdWdVkyVm5kVzVyYm05M2JtdGtaWE5qY21sd2RHbHZibmhtUTJ4aGRXUmxJSEJ5YjNacFpHVmtJSFJvYVhNZ1ptbHNaU0JoZENCMGFHVWdjbVZ4ZFdWemRDQnZaaUJoSUhWelpYSWdZVzVrSUcxaGVTQm9ZWFpsSUdOeVpXRjBaV1FnYjNJZ2JXOWthV1pwWldRZ2RHaGxJR1pwYkdVZ1kyOXVkR1Z1ZEhNdWJYTnZablIzWVhKbFFXZGxiblNoWkc1aGJXVm1RMnhoZFdSbGNtRnNiRUZqZEdsdmJuTkpibU5zZFdSbFpQVUFBQURJYW5WdFlnQUFBRUJxZFcxa1kySnZjZ0FSQUJDQUFBQ3FBRGliY1JOak1uQmhMbWhoYzJndVpHRjBZUUFBQUFBWVl6SnphQXRmMVhDU1BDUDNNVm1jR1FaZk80c0FBQUNBWTJKdmNxVmpZV3huWm5Ob1lUSTFObU53WVdSTkFBQUFBQUFBQUFBQUFBQUFBR1JvWVhOb1dDQWJ5WldjSlo5SllvTlBxMEVzbXhXeVJXcmFIRll0RnNiellGVmpkWGE0SkdSdVlXMWxibXAxYldKbUlHMWhibWxtWlhOMGFtVjRZMngxYzJsdmJuT0JvbVZ6ZEdGeWRCaDlabXhsYm1kMGFCa2VCQUFBQWo1cWRXMWlBQUFBSjJwMWJXUmpNbU5zQUJFQUVJQUFBS29BT0p0eEEyTXljR0V1WTJ4aGFXMHVkaklBQUFBQ0QyTmliM0tsWTJGc1oyWnphR0V5TlRacGMybG5ibUYwZFhKbGVFMXpaV3htSTJwMWJXSm1QUzlqTW5CaEwzVnlianBqTW5CaE9qa3pOekZpWlRKaUxUazJNRGN0TkRKbVppMWlOR016TFRRM01tWXpNelUwT1dWak5DOWpNbkJoTG5OcFoyNWhkSFZ5WldwcGJuTjBZVzVqWlVsRWVDeDRiWEE2YVdsa09qUTFORGMwTW1FeUxUQmpPVEF0TkRBek15MDVOMkl4TFdKaVlUVmlNR0V5TkRobE4zSmpjbVZoZEdWa1gyRnpjMlZ5ZEdsdmJuT0RvbU4xY214NExYTmxiR1lqYW5WdFltWTlZekp3WVM1aGMzTmxjblJwYjI1ekwyTXljR0V1YVc1bmNtVmthV1Z1ZEM1Mk0yUm9ZWE5vV0NCaVpJSW41Rnp1amhkUFpMOEl0OU5rMW4vb0VqdGUrMG01OHI5N1dlTG5GcUpqZFhKc2VDcHpaV3htSTJwMWJXSm1QV015Y0dFdVlYTnpaWEowYVc5dWN5OWpNbkJoTG1GamRHbHZibk11ZGpKa2FHRnphRmdnVjVWRUVUNGpnMDBZZk81SjYzdWMySXVJQWw3SGJYOC80MEROcEVXSGNNR2lZM1Z5YkhncGMyVnNaaU5xZFcxaVpqMWpNbkJoTG1GemMyVnlkR2x2Ym5Ndll6SndZUzVvWVhOb0xtUmhkR0ZrYUdGemFGZ2dyRWVpQm8rY1BBT1BQbk5TdEtnTFpHajN2NC9ub2xqY2tCSmRZc2N4RXVOMFkyeGhhVzFmWjJWdVpYSmhkRzl5WDJsdVptK2paRzVoYldWdlFXNTBhSEp2Y0dsaklFWnBiR1Z6WjNabGNuTnBiMjVsTVM0d0xqQnJjM0JsWTFabGNuTnBiMjVsTWk0MExqQUFBQkE0YW5WdFlnQUFBQ2hxZFcxa1l6Smpjd0FSQUJDQUFBQ3FBRGliY1FOak1uQmhMbk5wWjI1aGRIVnlaUUFBQUJBSVkySnZjdEtFV1FJU29nRW1HQ0ZaQWdvd2dnSUdNSUlCamFBREFnRUNBaFJBNWFBSzdzSTUwTDY0Zy9vR1FnVTlaMVVUQURBS0JnZ3Foa2pPUFFRREF6QkpNUmN3RlFZRFZRUUtFdzVCYm5Sb2NtOXdhV01zSUZCQ1F6RXVNQ3dHQTFVRUF4TWxRVzUwYUhKdmNHbGpJRU52Ym5SbGJuUWdRM0psWkdWdWRHbGhiSE1nVW05dmRDQkRRVEFlRncweU5qQTRNRGN4T0RRek5UWmFGdzB5T0RBNE1EWXhPVFF6TlRaYU1FUXhGekFWQmdOVkJBb1REa0Z1ZEdoeWIzQnBZeXdnVUVKRE1Ta3dKd1lEVlFRREV5QkJiblJvY205d2FXTWdRMnhoZFdSbElFTnZiblJsYm5RZ1UybG5ibWx1WnpCWk1CTUdCeXFHU000OUFnRUdDQ3FHU000OUF3RUhBMElBQkpoNkNtdkxVQmdGRk5VMHZVS2xPVnRFNmRqZDE3TDVTdXdYMExlbUZpc0JNM2RrZC8zY3lqeEZBM1FvNVM0NmZYMC9paFkwVlo3bWZiOUtGNzAzdDVPaldEQldNQTRHQTFVZER3RUIvd1FFQXdJSGdEQVZCZ05WSFNVRURqQU1CZ29yQmdFRUFZUG9YZ0lCTUF3R0ExVWRFd0VCL3dRQ01BQXdId1lEVlIwakJCZ3dGb0FVemxIaUJJRk9aRnNqK09QRXo1bytuTUhYWE1Jd0NnWUlLb1pJemowRUF3TURad0F3WkFJd01YTWRGSjRCZXRMTFZZN09SdUU5bm9xYmJBWk9abi9hQXJYeVR3RkFaZktyUHp4RjJ2UG9KTmYxK1VDZGcxWEdBakJ3WDF6ZDlXR3FZa3FtTDVTRnF3MVF5U2pyMXpKZnBKTTkrMXJkRHdTUExNT1BPakt1aVhqb1UvcFVVZUc5UndtaFkzQmhaRmtObmdBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFQWllRQ01wSXlRVTFRMnk5NGlqNStpNzZmdXpJblpYZVVnZGN0c09OSm9YbUIvSGw2dmZ2UWFlRXFNMmJrU0NSU045U1RWYm5hQjJUR2N5eFFPMXU2a2EwWHc9PC9jMnBhOm1hbmlmZXN0PjwvbWV0YWRhdGE+PHJlY3Qgd2lkdGg9IjUxMiIgaGVpZ2h0PSI1MTIiIGZpbGw9IiM2RDRBRkYiLz48ZyBmaWxsPSIjZmZmIj48Y2lyY2xlIGN4PSIyNTYiIGN5PSIxOTAiIHI9IjYyIi8+PGNpcmNsZSBjeD0iMTQwIiBjeT0iMjMwIiByPSI0NiIgb3BhY2l0eT0iLjc1Ii8+PGNpcmNsZSBjeD0iMzcyIiBjeT0iMjMwIiByPSI0NiIgb3BhY2l0eT0iLjc1Ii8+PHBhdGggZD0iTTE1MCA0MDBjMC03MCA0Ni0xMTAgMTA2LTExMHMxMDYgNDAgMTA2IDExMHoiLz48L2c+PGNpcmNsZSBjeD0iMjU2IiBjeT0iMTkwIiByPSIyMiIgZmlsbD0iIzE0QjhBNiIvPjwvc3ZnPgo=" type="image/svg+xml">
+<link rel="apple-touch-icon" href="./icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@500;700;900&display=swap" rel="stylesheet">
+<style>
+/* ألعاب جماعية - الأنماط والثيمات الثلاثة */
+:root{--bg:#F7F5FF;--card:#fff;--t:#1B1630;--mut:#6b6785;--bd:#e4e0f5;--ic:#14B8A6;--pbg:#6D4AFF;--on:#fff;--hbg:linear-gradient(135deg,#6D4AFF,#8B6CFF);--hfg:#fff;--sh:0 6px 18px rgba(109,74,255,.12);--gi:#d9fbf5}
+[data-theme=dark]{--bg:#12101F;--card:#1D1A33;--t:#F4F2FF;--mut:#a9a4c8;--bd:#2e2a4d;--ic:#2DD4BF;--pbg:#8B6CFF;--on:#0f0c1d;--hbg:#1D1A33;--hfg:#F4F2FF;--sh:0 6px 18px rgba(0,0,0,.35);--gi:#26224a}
+[data-theme=gold]{--bg:linear-gradient(160deg,#F6E27A,#D4AF37 55%,#B8860B);--card:linear-gradient(145deg,#F3F4F6,#C0C0C0 60%,#9CA3AF);--t:#000;--mut:#000;--bd:#8a6a00;--ic:#000;--pbg:linear-gradient(135deg,#F6E27A,#D4AF37,#B8860B);--on:#000;--hbg:linear-gradient(110deg,#B8860B,#F6E27A,#D4AF37,#F6E27A,#B8860B);--hfg:#000;--sh:0 6px 18px rgba(80,55,0,.3);--gi:rgba(255,255,255,.55)}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;font-family:Cairo,Tahoma,sans-serif;background:var(--bg) fixed;color:var(--t);min-height:100vh}
+header{position:sticky;top:0;z-index:5;display:flex;justify-content:space-between;align-items:center;padding:calc(env(safe-area-inset-top,0px) + 14px) 20px 18px;background:var(--hbg);color:var(--hfg);border-radius:0 0 28px 28px;box-shadow:var(--sh)}
+[data-theme=gold] header{background-size:300% 100%;animation:shine 6s linear infinite}
+h1{margin:0;font-size:1.35rem;font-weight:900}
+header button{background:rgba(255,255,255,.2);border:0;color:inherit;width:42px;height:42px;border-radius:14px;display:grid;place-items:center;cursor:pointer}
+main{max-width:560px;margin:auto;padding:18px 16px calc(130px + env(safe-area-inset-bottom,0px))}
+h2{text-align:center;font-size:1.6rem;margin:10px 0 2px;font-weight:900}
+.hint{text-align:center;color:var(--mut);margin:0 0 14px;font-size:.9rem;font-weight:600}
+.ic{width:24px;height:24px}.sm{width:16px;height:16px}
+.btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;border:0;border-radius:18px;padding:14px;font:700 1.05rem Cairo,sans-serif;background:var(--pbg);color:var(--on);box-shadow:var(--sh);cursor:pointer;transition:transform .15s}
+.btn:active{transform:scale(.96)}
+.ghost{background:transparent;color:var(--t);border:2px solid var(--bd);box-shadow:none}
+.danger{background:#e5484d;color:#fff;margin:14px 0 8px}
+.rnd{margin-bottom:16px;animation:pulse 2.4s infinite}
+.card{position:relative;display:flex;align-items:center;gap:14px;background:var(--card);border:2px solid var(--bd);border-radius:24px;padding:14px 16px;margin-bottom:14px;box-shadow:var(--sh);cursor:pointer;animation:up .5s both;animation-delay:calc(var(--i)*80ms);transition:transform .15s,opacity .2s}
+.card:active{transform:scale(.97)}
+.gi{width:62px;height:62px;border-radius:20px;background:var(--gi);color:var(--ic);display:grid;place-items:center;flex:none}
+.gi .ic{width:32px;height:32px}
+.ct{flex:1;display:flex;flex-direction:column;gap:2px}
+.ct b{font-size:1.2rem}
+.ct span{display:flex;align-items:center;gap:6px;color:var(--mut);font-weight:600}
+.ct em{font-style:normal;font-size:.8rem;font-weight:700;color:var(--ic)}
+.dim{opacity:.55}
+.lk{opacity:.6;filter:grayscale(.85)}
+[data-theme=gold] .lk{filter:none;opacity:.55}
+.lockic{color:var(--t);width:26px;height:26px}
+.fav{background:none;border:0;color:var(--mut);padding:6px;cursor:pointer}
+.fav.on{color:#e5484d}
+.fav.on svg{fill:currentColor;animation:pop .35s}
+[data-theme=gold] .fav.on{color:#000}
+.hl{outline:3px solid var(--ic);transform:scale(1.03)}
+.shake{animation:shake .4s}
+.rate{text-align:center;margin-top:22px;color:var(--mut);font-weight:600}
+.stars{display:flex;justify-content:center;margin:6px 0 12px}
+.stars button{background:none;border:0;color:var(--mut);padding:2px;cursor:pointer}
+.stars .ic{width:30px;height:30px}
+.stars .on{color:#f5b301}
+.stars .on svg{fill:currentColor}
+.rate small{display:block;margin-top:10px}
+.row{display:flex;gap:10px}
+input{flex:1;min-width:0;border:2px solid var(--bd);background:var(--card);color:var(--t);border-radius:18px;padding:12px 16px;font:600 1rem Cairo,sans-serif;outline:0}
+input:focus{border-color:var(--ic)}
+.add{width:auto;padding:0 22px}
+ul{list-style:none;padding:0;margin:0}
+li{display:flex;justify-content:space-between;align-items:center;background:var(--card);border:2px solid var(--bd);border-radius:16px;padding:10px 16px;margin-bottom:10px;font-weight:700;animation:up .3s both}
+li.pop{animation:pop .4s}
+li button{background:none;border:0;color:var(--mut);cursor:pointer}
+.start{position:fixed;left:16px;right:16px;bottom:calc(88px + env(safe-area-inset-bottom,0px));width:auto;max-width:528px;margin:auto}
+nav{position:fixed;bottom:0;left:0;right:0;z-index:5;display:flex;background:var(--card);border-top:2px solid var(--bd);border-radius:24px 24px 0 0;padding:8px 8px calc(8px + env(safe-area-inset-bottom,0px));box-shadow:0 -6px 18px rgba(0,0,0,.08)}
+nav button{flex:1;background:none;border:0;color:var(--mut);display:flex;flex-direction:column;align-items:center;gap:2px;font:600 .78rem Cairo,sans-serif;padding:6px;transition:.2s;cursor:pointer}
+nav button.on{color:var(--ic);transform:translateY(-3px);font-weight:900}
+[data-theme=gold] nav button{color:#000}
+.ov{position:fixed;inset:0;background:rgba(10,8,25,.55);display:grid;place-items:center;padding:20px;z-index:20;animation:fade .2s}
+.box{width:100%;max-width:420px;max-height:88vh;overflow:auto;background:var(--card);color:var(--t);border:2px solid var(--bd);border-radius:28px;padding:22px;animation:scale .25s}
+.box h3{margin:0 0 14px;font-size:1.4rem}
+table{width:100%;border-collapse:collapse;margin-bottom:16px}
+th,td{padding:10px 6px;text-align:start;border-bottom:1px solid var(--bd)}
+th{color:var(--mut);font-size:.85rem}
+.sw{display:flex;justify-content:space-between;align-items:center;padding:10px 0;font-weight:700}
+.sw button{width:52px;height:30px;border-radius:20px;border:0;background:var(--bd);position:relative;transition:.2s;cursor:pointer}
+.sw b{position:absolute;top:3px;inset-inline-start:3px;width:24px;height:24px;border-radius:50%;background:#fff;transition:.2s}
+.sw .on{background:var(--ic)}
+.sw .on b{inset-inline-start:25px}
+.lbl{margin:12px 0 8px;color:var(--mut);font-weight:700}
+.th{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.th button{border:2px solid var(--bd);background:transparent;color:var(--t);border-radius:16px;padding:10px 4px;font:700 .9rem Cairo,sans-serif;display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer}
+.th button.on{border-color:var(--ic);box-shadow:0 0 0 2px var(--ic)}
+.th i{width:34px;height:34px;border-radius:50%;border:2px solid rgba(0,0,0,.15)}
+.t-light i{background:linear-gradient(135deg,#fff 50%,#6D4AFF 50%)}
+.t-dark i{background:linear-gradient(135deg,#1D1A33 50%,#8B6CFF 50%)}
+.t-gold i{background:linear-gradient(135deg,#F6E27A,#B8860B 55%,#C0C0C0 55%)}
+#toast{position:fixed;left:50%;bottom:calc(160px + env(safe-area-inset-bottom,0px));transform:translate(-50%,20px);background:#1B1630;color:#fff;padding:10px 18px;border-radius:16px;font-weight:700;opacity:0;pointer-events:none;transition:.25s;z-index:30;max-width:90%;text-align:center}
+#toast.on{opacity:1;transform:translate(-50%,0)}
+button:focus-visible,input:focus-visible{outline:3px solid var(--ic);outline-offset:2px}
+@keyframes up{from{opacity:0;transform:translateY(16px)}}
+@keyframes fade{from{opacity:0}}
+@keyframes scale{from{opacity:0;transform:scale(.9)}}
+@keyframes pop{50%{transform:scale(1.25)}}
+@keyframes pulse{50%{transform:scale(1.025)}}
+@keyframes shake{25%{transform:translateX(-8px)}75%{transform:translateX(8px)}}
+@keyframes shine{to{background-position:300% 0}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<header></header>
+<main id="app"></main>
+<nav></nav>
+<div id="modal"></div>
+<div id="toast"></div>
+<script>
+'use strict';
+// ألعاب جماعية - الواجهة الأولى
+const $ = s => document.querySelector(s), K = 'aj_v1';
+const esc = s => String(s).replace(/[&<>"']/g, c => '&#' + c.charCodeAt(0) + ';');
+
+// أيقونات SVG خطية موحدة
+const P = {
+  users:'<circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c0-3.6 2.9-6 6.5-6s6.5 2.4 6.5 6M16 4.6a3.5 3.5 0 010 6.8M18 14.3c2 .7 3.5 2.6 3.5 5.2"/>',
+  home:'<path d="M3 11l9-8 9 8M5 10v10h14V10M10 20v-6h4v6"/>',
+  cup:'<path d="M8 4h8v6a4 4 0 01-8 0zM8 6H4c0 3 1.5 4.5 4 5M16 6h4c0 3-1.5 4.5-4 5M12 14v4M8 20h8"/>',
+  set:'<path d="M4 6h10M18 6h2M4 12h4M12 12h8M4 18h12M20 18h0"/><circle cx="16" cy="6" r="2"/><circle cx="10" cy="12" r="2"/><circle cx="18" cy="18" r="2"/>',
+  heart:'<path d="M12 20s-8-5-8-11a4.5 4.5 0 018-2.5A4.5 4.5 0 0120 9c0 6-8 11-8 11z"/>',
+  lock:'<rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 018 0v3"/>',
+  dice:'<rect x="4" y="4" width="16" height="16" rx="3"/><path d="M9 9h.01M15 9h.01M9 15h.01M15 15h.01M12 12h.01"/>',
+  eye:'<path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/>',
+  wink:'<circle cx="12" cy="12" r="9"/><path d="M8 10h2M14 10.5l2-1M8.5 15c2 2 5 2 7 0"/>',
+  search:'<circle cx="11" cy="11" r="6"/><path d="M16 16l5 5"/>',
+  x:'<path d="M6 6l12 12M18 6L6 18"/>',
+  star:'<path d="M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9z"/>'
+};
+const ic = (n, c = '') => `<svg class="ic ${c}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${P[n]}</svg>`;
+
+// الألعاب: l = مغلقة. لفتح لعبة غيّر l إلى 0
+const G = [
+  {id:'bara', n:'برا السالفة', i:'eye', a:3, b:12, l:0},
+  {id:'ghamza', n:'غمزة', i:'wink', a:5, b:12, l:1},
+  {id:'tahqiq', n:'تحقيق', i:'search', a:4, b:12, l:1}
+];
+const gm = id => G.find(g => g.id === id);
+
+// الحالة (تُحفظ في localStorage)
+const fresh = () => ({names:[], pts:{}, fav:[], mute:0, vib:1, theme:'light', rate:0});
+let S = fresh();
+try { Object.assign(S, JSON.parse(localStorage.getItem(K))); } catch (e) {}
+const save = () => { try { localStorage.setItem(K, JSON.stringify(S)); } catch (e) {} };
+const n = () => S.names.length;
+const fits = g => !n() || (n() >= g.a && n() <= g.b);
+// تستعملها الألعاب لإضافة نقاط للاعب
+window.addPoints = (name, k) => { S.pts[name] = (S.pts[name] || 0) + k; save(); };
+
+// الصوت والاهتزاز والتنبيهات
+let ac;
+const beep = (f = 520, d = .08) => {
+  if (S.mute) return;
+  try {
+    ac = ac || new AudioContext();
+    const o = ac.createOscillator(), g = ac.createGain(), t = ac.currentTime;
+    o.frequency.value = f; g.gain.setValueAtTime(.12, t); g.gain.exponentialRampToValueAtTime(.001, t + d);
+    o.connect(g).connect(ac.destination); o.start(); o.stop(t + d);
+  } catch (e) {}
+};
+const vib = p => { if (S.vib && navigator.vibrate) navigator.vibrate(p); };
+const toast = m => {
+  const t = $('#toast'); t.textContent = m; t.classList.add('on');
+  clearTimeout(toast.t); toast.t = setTimeout(() => t.classList.remove('on'), 2000);
+};
+const applyTheme = () => {
+  document.documentElement.dataset.theme = S.theme;
+  $('meta[name=theme-color]').content = {light:'#6D4AFF', dark:'#1D1A33', gold:'#D4AF37'}[S.theme] || '#6D4AFF';
+};
+
+// العرض
+let T = 'games';
+const tab = t => { T = t; render(); window.scrollTo(0, 0); };
+function card(g, i) {
+  const bad = !g.l && !fits(g), fav = S.fav.includes(g.id);
+  const note = g.l ? 'قريباً' : bad ? (n() < g.a ? `تحتاج ${g.a} لاعبين على الأقل` : `الحد الأقصى ${g.b} لاعباً`) : '';
+  return `<div class="card ${g.l ? 'lk' : ''} ${bad ? 'dim' : ''}" id="c-${g.id}" data-a="play" data-v="${g.id}" style="--i:${i}">
+    <div class="gi">${ic(g.i)}</div>
+    <div class="ct"><b>${g.n}</b><span>${ic('users', 'sm')}${g.a}-${g.b}</span>${note ? `<em>${note}</em>` : ''}</div>
+    ${g.l ? ic('lock', 'lockic') : `<button class="fav ${fav ? 'on' : ''}" data-a="fav" data-v="${g.id}" aria-label="المفضلة">${ic('heart')}</button>`}
+  </div>`;
+}
+function games() {
+  const r = g => g.l ? 3 : !fits(g) ? 2 : S.fav.includes(g.id) ? 0 : 1;
+  const list = [...G].sort((x, y) => r(x) - r(y));
+  return `<h2>قائمة الألعاب</h2>
+  <p class="hint">${n() ? `عدد اللاعبين: ${n()}` : 'أضف اللاعبين من تبويب «تعديل الأسماء»'}</p>
+  <button class="btn rnd" data-a="rand">${ic('dice')} لعبة عشوائية</button>
+  ${list.map(card).join('')}
+  <div class="rate"><p>إذا أعجبتك الألعاب، فتقييمك يجعلنا نبتسم</p>
+    <div class="stars">${[1,2,3,4,5].map(k => `<button data-a="star" data-v="${k}" class="${k <= S.rate ? 'on' : ''}" aria-label="${k}">${ic('star')}</button>`).join('')}</div>
+    <button class="btn ghost" data-a="rate">قيّم الموقع</button><small>الإصدار 1.0.0</small></div>`;
+}
+function names() {
+  return `<h2>أدخل أسماء اللاعبين</h2>
+  <div class="row"><input id="nm" maxlength="14" placeholder="اسم اللاعب" autocomplete="off"><button class="btn add" data-a="add">إضافة</button></div>
+  <p class="hint">${n()}/12</p>
+  <ul>${S.names.map(x => `<li><span>${esc(x)}</span><button data-a="del" data-v="${esc(x)}" aria-label="حذف">${ic('x')}</button></li>`).join('')}</ul>
+  <button class="btn start" data-a="start">ابدأ</button>`;
+}
+function render() {
+  document.querySelectorAll('nav button').forEach(b => b.classList.toggle('on', b.dataset.t === T));
+  $('#app').innerHTML = T === 'games' ? games() : names();
+}
+const modal = h => { $('#modal').innerHTML = `<div class="ov" data-a="close"><div class="box">${h}</div></div>`; };
+const sw = (k, l) => `<div class="sw"><span>${l}</span><button data-a="tg" data-v="${k}" class="${S[k] ? 'on' : ''}" role="switch" aria-checked="${!!S[k]}"><b></b></button></div>`;
+
+// الإجراءات
+const A = {
+  tab,
+  close() { $('#modal').innerHTML = ''; },
+  play(id) {
+    const g = gm(id), el = $('#c-' + id);
+    if (g.l) { el.classList.remove('shake'); void el.offsetWidth; el.classList.add('shake'); vib([30, 40, 30]); return toast('هذه اللعبة قريباً'); }
+    if (!n()) { toast('أضف أسماء اللاعبين أولاً'); return tab('names'); }
+    if (!fits(g)) return toast(n() < g.a ? `تحتاج ${g.a} لاعبين على الأقل` : `الحد الأقصى ${g.b} لاعباً`);
+    window.openGame ? window.openGame(id) : toast('قريباً');
+  },
+  fav(id) { const i = S.fav.indexOf(id); i < 0 ? S.fav.push(id) : S.fav.splice(i, 1); save(); render(); },
+  rand() {
+    if (!n()) { toast('أضف أسماء اللاعبين أولاً'); return tab('names'); }
+    const p = G.filter(g => !g.l && fits(g));
+    if (!p.length) return toast('لا توجد لعبة تناسب هذا العدد');
+    const w = p[Math.random() * p.length | 0]; let k = 0;
+    const step = () => {
+      document.querySelectorAll('.hl').forEach(c => c.classList.remove('hl'));
+      if (k < 9) { $('#c-' + p[k % p.length].id).classList.add('hl'); beep(400 + k * 60, .05); k++; setTimeout(step, 90 + k * 12); }
+      else { $('#c-' + w.id).classList.add('hl'); beep(900, .2); vib(40); setTimeout(() => A.play(w.id), 600); }
+    };
+    step();
+  },
+  add() {
+    const v = ($('#nm').value || '').trim().replace(/\s+/g, ' ');
+    if (!v) return toast('اكتب اسماً أولاً');
+    if (S.names.some(x => x.toLowerCase() === v.toLowerCase())) return toast('الاسم موجود مسبقاً');
+    if (n() >= 12) return toast('الحد الأقصى 12 لاعباً');
+    S.names.push(v); S.pts[v] = S.pts[v] || 0; save(); render();
+    beep(780); vib(20);
+    const l = document.querySelector('li:last-child'); if (l) l.classList.add('pop');
+    $('#nm').focus();
+  },
+  del(v) { S.names = S.names.filter(x => x !== v); delete S.pts[v]; save(); render(); },
+  start() {
+    const mn = Math.min(...G.filter(g => !g.l).map(g => g.a));
+    if (n() < mn) return toast(`تحتاج ${mn} لاعبين على الأقل`);
+    tab('games');
+  },
+  results() {
+    const r = [...S.names].sort((a, b) => (S.pts[b] || 0) - (S.pts[a] || 0));
+    modal(`<h3>النتائج</h3>${r.length
+      ? `<table><tr><th>المركز</th><th>اللاعب</th><th>النتيجة</th></tr>${r.map((x, i) => `<tr><td>${i + 1}</td><td>${esc(x)}</td><td>${S.pts[x] || 0}</td></tr>`).join('')}</table>`
+      : '<p class="hint">أضف لاعبين لتظهر النتائج</p>'}<button class="btn" data-a="close">إغلاق</button>`);
+  },
+  settings() {
+    modal(`<h3>الإعدادات</h3>${sw('mute', 'وضع الصامت')}${sw('vib', 'الاهتزاز')}<p class="lbl">المظهر</p>
+    <div class="th">${[['light','نهاري'],['dark','ليلي'],['gold','ذهبي']].map(([k, l]) => `<button data-a="theme" data-v="${k}" class="t-${k} ${S.theme === k ? 'on' : ''}"><i></i>${l}</button>`).join('')}</div>
+    <button class="btn danger" data-a="clear">محو البيانات</button><button class="btn ghost" data-a="close">إغلاق</button>`);
+  },
+  tg(k, el) { S[k] = +!S[k]; save(); el.classList.toggle('on'); el.setAttribute('aria-checked', !!S[k]); },
+  theme(v) {
+    S.theme = v; save(); applyTheme();
+    document.querySelectorAll('.th button').forEach(b => b.classList.toggle('on', b.dataset.v === v));
+  },
+  clear(v, el) {
+    if (!el.dataset.c) {
+      el.dataset.c = 1; el.textContent = 'اضغط مرة أخرى للتأكيد';
+      setTimeout(() => { el.dataset.c = ''; el.textContent = 'محو البيانات'; }, 3000); return;
+    }
+    S = fresh(); save(); applyTheme(); A.close(); render(); toast('تم محو البيانات');
+  },
+  star(v) { S.rate = +v; save(); render(); },
+  rate() { toast(S.rate ? 'شكراً لتقييمك!' : 'اختر عدد النجوم أولاً'); }
+};
+document.addEventListener('click', e => {
+  const el = e.target.closest('[data-a]');
+  if (!el || (el.classList.contains('ov') && e.target !== el)) return;
+  beep(600); vib(10);
+  if (A[el.dataset.a]) A[el.dataset.a](el.dataset.v, el);
+});
+document.addEventListener('keydown', e => { if (e.key === 'Enter' && e.target.id === 'nm') A.add(); });
+
+// البداية
+$('header').innerHTML = `<h1>ألعاب جماعية</h1><button data-a="settings" aria-label="الإعدادات">${ic('set')}</button>`;
+$('nav').innerHTML = [['res','cup','النتائج','results'], ['games','home','قائمة الألعاب','tab'], ['names','users','تعديل الأسماء','tab']]
+  .map(([t, i, l, a]) => `<button data-a="${a}" data-v="${t}" data-t="${t}">${ic(i)}<span>${l}</span></button>`).join('');
+applyTheme(); render();
+if ('serviceWorker' in navigator) addEventListener('load', () => navigator.serviceWorker.register('./sw.js').catch(() => {}));
+</script>
+</body>
+</html>
