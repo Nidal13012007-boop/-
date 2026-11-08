@@ -2,17 +2,19 @@
 (() => {
 P.phone = '<rect x="7" y="2" width="10" height="20" rx="2"/><path d="M11 18h2"/>';
 P.edit = '<path d="M4 20h4L19 9l-4-4L4 16zM13 7l4 4"/>';
-const WORDS = {
- 'أماكن':[['مطار',['محطة قطار','ميناء','فندق']],['مستشفى',['صيدلية','عيادة','مدرسة']],['مدرسة',['جامعة','روضة','مكتبة']],['شاطئ',['مسبح','جزيرة','منتجع']],['سوق',['مول','متجر','بقالة']],['ملعب',['صالة رياضية','مضمار','حديقة']]],
- 'مهن':[['طبيب',['ممرض','صيدلي','جراح']],['معلم',['مدرب','أستاذ','مربية']],['طيار',['مضيف','قبطان','سائق']],['طباخ',['خباز','نادل','جزار']],['شرطي',['حارس','قاضٍ','محقق']],['مهندس',['مقاول','فني','نجار']]],
- 'أكل':[['بيتزا',['برغر','فطيرة','معكرونة']],['كسكسي',['أرز','برغل','شوربة']],['شاي',['قهوة','عصير','حليب']],['تمر',['زبيب','تين','عسل']],['آيس كريم',['حلوى','كيك','شوكولاتة']],['سمك',['دجاج','لحم','جمبري']]],
- 'حيوانات':[['أسد',['نمر','فهد','ذئب']],['حصان',['حمار','جمل','بقرة']],['نسر',['صقر','حمامة','بومة']],['دلفين',['حوت','قرش','سلحفاة']],['قطة',['أرنب','كلب','هامستر']],['ثعبان',['سحلية','تمساح','ضفدع']]],
- 'أشياء':[['مفتاح',['قفل','باب','سلسلة']],['ساعة',['منبه','هاتف','سوار']],['نظارة',['عدسة','قبعة','قلم']],['مظلة',['معطف','حذاء','قبعة']],['سرير',['وسادة','أريكة','بطانية']],['مرآة',['نافذة','صورة','لوحة']]],
- 'عام':[['رمضان',['عيد','حج','مسجد']],['زواج',['خطوبة','عرس','حفلة']],['سفر',['رحلة','إجازة','سياحة']],['مطر',['ثلج','غيم','رعد']],['كرة القدم',['كرة السلة','تنس','سباحة']],['امتحان',['واجب','اختبار','مدرسة']]]
-};
+const CL = {"أماكن": ["مطار،محطة قطار،ميناء،محطة حافلات", "مستشفى،صيدلية،عيادة،مختبر", "مدرسة،جامعة،روضة،مكتبة", "شاطئ،مسبح،جزيرة،منتجع", "سوق،مول،متجر،بقالة", "ملعب،صالة رياضية،مضمار،حلبة", "فندق،نزل،مخيم،شاليه", "حديقة،غابة،حقل،مزرعة", "مطعم،مقهى،كافيتريا،مخبز", "سينما،مسرح،متحف،معرض"], "مهن": ["طبيب،ممرض،صيدلي،جراح", "معلم،مدرب،أستاذ،مربية", "طيار،مضيف،قبطان،سائق", "طباخ،خباز،نادل،جزار", "شرطي،حارس،قاضٍ،محقق", "مهندس،مقاول،نجار،سباك", "محامٍ،موثق،محاسب،مستشار", "مزارع،راعٍ،صياد،بستاني", "ميكانيكي،كهربائي،حداد،لحام", "مصور،رسام،مخرج،ممثل"], "أكل": ["بيتزا،برغر،فطيرة،معكرونة", "كسكسي،أرز،برغل،شوربة", "شاي،قهوة،عصير،حليب", "تمر،زبيب،تين،عسل", "آيس كريم،حلوى،كيك،شوكولاتة", "سمك،دجاج،لحم،جمبري", "خبز،كرواسون،بسكويت،كعك", "تفاح،موز،برتقال،عنب", "طماطم،خيار،جزر،بطاطا", "حساء،سلطة،مقبلات،مرق"], "حيوانات": ["أسد،نمر،فهد،ذئب", "حصان،حمار،جمل،بقرة", "نسر،صقر،حمامة،بومة", "دلفين،حوت،قرش،سلحفاة", "قطة،أرنب،كلب،هامستر", "ثعبان،سحلية،تمساح،ضفدع", "فيل،زرافة،وحيد القرن،فرس النهر", "نحلة،فراشة،نملة،بعوضة", "دجاجة،بطة،ديك،إوزة", "قرد،غوريلا،شمبانزي،دب"], "أشياء": ["مفتاح،قفل،باب،سلسلة", "ساعة،منبه،هاتف،سوار", "نظارة،عدسة،قبعة،قلم", "مظلة،معطف،حذاء،وشاح", "سرير،وسادة،أريكة،بطانية", "مرآة،نافذة،صورة،لوحة", "ملعقة،شوكة،سكين،صحن", "كرسي،طاولة،خزانة،رف", "حقيبة،محفظة،صندوق،كيس", "مصباح،شمعة،فانوس،مروحة"], "عام": ["رمضان،عيد،حج،مسجد", "زواج،خطوبة،عرس،حفلة", "سفر،رحلة،إجازة،سياحة", "مطر،ثلج،غيم،رعد", "كرة القدم،كرة السلة،تنس،سباحة", "امتحان،واجب،اختبار،شهادة", "مال،راتب،ادخار،ميزانية", "نوم،حلم،كابوس،أرق", "صداقة،جيرة،قرابة،زمالة", "فرح،حزن،غضب،خوف"]};
+// المقاربة لكل كلمة = بقية كلمات مجموعتها (وهي كلمات أساسية أيضاً)
+const WORDS = Object.fromEntries(Object.entries(CL).map(([n, cs]) => [n, cs.flatMap(c => { const w = c.split('،'); return w.map((x, i) => [x, w.filter((_, j) => j !== i)]); })]));
 // القوائم (الافتراضية تُنسخ مرة واحدة إلى S.bsLists لتصبح قابلة للتعديل)
 const DEF = Object.keys(WORDS).map((n, i) => ({id: 'd' + i, name: n, fav: 0, words: WORDS[n]}));
-const lists = () => { if (!S.bsLists) { S.bsLists = JSON.parse(JSON.stringify(DEF)); save(); } return S.bsLists; };
+const lists = () => {
+  if (!S.bsLists) { S.bsLists = JSON.parse(JSON.stringify(DEF)); S.bsV = 2; save(); }
+  else if (S.bsV !== 2) { // ترقية: دمج الكلمات الجديدة في القوائم الافتراضية دون المساس بتعديلاتك
+    DEF.forEach(d => { const l = S.bsLists.find(x => x.id === d.id); if (l) d.words.forEach(w => { if (!l.words.some(x => x[0] === w[0])) l.words.push(JSON.parse(JSON.stringify(w))); }); });
+    S.bsV = 2; save();
+  }
+  return S.bsLists;
+};
 const cfg = {cat:'d0', out:1, timer:0, prob:0};
 let R, bs, tm, gcb, gch, tp = 0, tt;
 const sh = a => { a = [...a]; for (let i = a.length - 1; i > 0; i--) { const j = Math.random() * (i + 1) | 0; [a[i], a[j]] = [a[j], a[i]]; } return a; };
@@ -39,7 +41,18 @@ st.textContent = `#bs{position:fixed;inset:0;z-index:15;background:var(--bg);ove
 #bs input[type=range]{padding:0;border:0;width:100%;accent-color:var(--ic)}
 .li2{display:flex;align-items:center;gap:6px;padding:12px 16px}.li2 b{flex:1}.li2 small{color:var(--mut)}
 .fv{background:none;border:0;color:var(--mut);padding:6px;cursor:pointer}.fv.on{color:#e5484d}.fv.on svg{fill:currentColor}
-.act{margin-inline-start:auto;display:flex}.ord small{color:var(--mut);font-weight:600}`;
+.act{margin-inline-start:auto;display:flex}.ord small{color:var(--mut);font-weight:600}
+#bsr{position:fixed;inset:0;z-index:18;background:var(--bg);overflow:auto;animation:fade .2s}
+.rh{position:sticky;top:0;z-index:2;display:flex;align-items:center;gap:12px;padding:calc(env(safe-area-inset-top,0px) + 12px) 16px 12px;background:var(--hbg);color:var(--hfg);font-size:1.25rem;border-radius:0 0 24px 24px;box-shadow:var(--sh)}
+.rh .xb{background:rgba(255,255,255,.22);border:0;color:inherit}
+.rb{max-width:560px;margin:auto;padding:16px 16px 40px}
+.gr3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px}.gr{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:10px}
+.kp{background:var(--gi);border-radius:16px;padding:10px 6px;text-align:center;display:flex;flex-direction:column;gap:2px;justify-content:center}.kp b{font-size:1.2rem}.kp span{font-size:.72rem;font-weight:600;color:var(--mut)}
+.pc{background:var(--card);border:2px solid var(--bd);border-radius:24px;padding:16px;margin-bottom:14px;box-shadow:var(--sh)}
+.ph{display:flex;align-items:center;gap:10px}.ph b{flex:1;font-size:1.15rem}.ph em{font-style:normal;font-weight:900;font-size:1.5rem;color:var(--ic)}.ph small{font-size:.75rem;color:var(--mut);font-weight:600}
+.rk{width:34px;height:34px;border-radius:50%;background:var(--bd);display:grid;place-items:center;font-weight:900}.r0{background:#f5b301}.r1{background:#c0c0c0}.r2{background:#cd7f32}.r0,.r1,.r2{color:#000}
+.bar{height:8px;border-radius:8px;background:var(--bd);margin:12px 0 4px;overflow:hidden}.bar i{display:block;height:100%;background:var(--ic);border-radius:8px}
+.bl{display:flex;justify-content:space-between;font-size:.8rem;color:var(--mut);font-weight:600}`;
 document.head.appendChild(st);
 const B = {};
 const put = (t, b) => { clearInterval(tm); bs.innerHTML = `<div class="w"><div class="bt"><b>${t}</b><button class="xb" data-b="x" aria-label="خروج">${ic('x')}</button></div>${b}</div>`; bs.scrollTop = 0; };
@@ -148,6 +161,13 @@ function result() {
   }
   Object.entries(pts).forEach(([n, k]) => addPoints(n, k));
   R.pl.forEach(x => gameRes.add('bara', x, pts[x] || 0)); gameRes.round('bara');
+  const gr = gameRes.get('bara'); gr.st = gr.st || {}; if (R.none) gr.none = (gr.none || 0) + 1;
+  R.pl.forEach(x => {
+    const a = gr.st[x] = gr.st[x] || {p: 0, o: 0, h: 0, g: 0, f: 0, w: 0, l: 0}; a.p++;
+    if (out.includes(x)) { a.o++; if (un.includes(x)) a.h++; else if (R.right.includes(x)) a.g++; else a.f++; }
+    else if (!R.none) { if (win) a.w++; else a.l++; }
+  });
+  save();
   const rows = Object.entries(pts);
   put('النتيجة', `<h2>${R.none ? 'جولة بدون برا السالفة' : win ? 'تم كشفه!' : 'التمويه نجح!'}</h2>
   <div class="sec"><p class="hint">الكلمة السرية (${esc(R.cat)})</p><div class="big" style="margin:0">${esc(R.word)}</div></div>
@@ -204,14 +224,26 @@ B.we = v => { const [id, k] = v.split('|'); editor(id, +k); };
 B.wd = v => { const [id, k] = v.split('|'); find(id).words.splice(+k, 1); save(); editor(id); };
 
 // ===== نتائج خاصة بهذه اللعبة فقط (منفصلة عن النتائج العامة) =====
+// شاشة نتائج اللعبة: تغطي كامل الشاشة وتُغلق بـ x أعلى اليمين
 function resScreen() {
-  const r = gameRes.get('bara'), n = Object.keys(r.pts).sort((a, b) => r.pts[b] - r.pts[a]);
-  put('نتائج برا السالفة', `<p class="hint">عدد الجولات: ${r.rounds}</p>${n.length
-    ? `<div class="sec"><table><tr><th>المركز</th><th>اللاعب</th><th>النقاط</th></tr>${n.map((x, i) => `<tr><td>${i + 1}</td><td>${esc(x)}</td><td>${r.pts[x]}</td></tr>`).join('')}</table></div>`
-    : '<p class="hint">لا توجد نتائج بعد، العب جولة أولاً</p>'}
-  <button class="btn danger" data-b="rr">تصفير نتائج هذه اللعبة</button><button class="btn ghost" data-b="home">رجوع</button>`);
+  const r = gameRes.get('bara'), st = r.st || {}, ks = [...new Set([...Object.keys(r.pts), ...Object.keys(st)])];
+  const g = x => Object.assign({p: 0, o: 0, h: 0, g: 0, f: 0, w: 0, l: 0}, st[x]);
+  const pt = x => r.pts[x] || 0, wins = x => g(x).w + g(x).h + g(x).g, dec = x => g(x).w + g(x).l + g(x).o;
+  const pc = (a, b) => b ? Math.round(a * 100 / b) : 0;
+  ks.sort((a, b) => pt(b) - pt(a) || wins(b) - wins(a));
+  const kp = (v, l) => `<div class="kp"><b>${v}</b><span>${l}</span></div>`;
+  const card = (x, i) => { const s = g(x), wr = pc(wins(x), dec(x));
+    return `<div class="pc"><div class="ph"><span class="rk r${i}">${i + 1}</span><b>${esc(x)}</b><em>${pt(x)} <small>نقطة</small></em></div>
+    <div class="bar"><i style="width:${wr}%"></i></div><div class="bl"><span>نسبة الفوز</span><b>${wr}%</b></div>
+    <div class="gr">${kp(s.p, 'مباراة لعبها')}${kp(s.o, 'مرات برا السالفة')}${kp(s.h, 'نجح بالتخفي')}${kp(s.g, 'كُشف ونجح بالتخمين')}${kp(s.f, 'فشل: كُشف ولم يخمّن')}${kp(pc(s.h + s.g, s.o) + '%', 'نسبة نجاحه برا السالفة')}${kp(s.w, 'فاز مع المجموعة')}${kp(s.l, 'خسر مع المجموعة')}</div></div>`; };
+  const o = $('#bsr'); if (o) o.remove();
+  bs.insertAdjacentHTML('beforeend', `<div id="bsr"><div class="rh"><button class="xb" data-b="xr" aria-label="إغلاق">${ic('x')}</button><b>نتائج برا السالفة</b></div>
+  <div class="rb"><div class="gr3">${kp(r.rounds, 'عدد الجولات')}${kp(r.none || 0, 'جولات بلا برا السالفة')}${kp(ks[0] ? esc(ks[0]) : '-', 'المتصدر')}</div>
+  ${ks.length ? ks.map(card).join('') : '<p class="hint">لا توجد نتائج بعد، العب جولة أولاً</p>'}
+  <button class="btn danger" data-b="rr">تصفير نتائج هذه اللعبة</button></div></div>`);
 }
 B.res = resScreen;
+B.xr = () => { const o = $('#bsr'); if (o) o.remove(); };
 B.rr = (v, el) => twice(el, 'اضغط مرة أخرى لتصفير النتائج', () => { gameRes.reset('bara'); resScreen(); });
 
 // نقطة الدخول التي يستدعيها app.js

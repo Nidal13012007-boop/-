@@ -98,6 +98,15 @@ button:focus-visible,input:focus-visible{outline:3px solid var(--ic);outline-off
 @keyframes shake{25%{transform:translateX(-8px)}75%{transform:translateX(8px)}}
 @keyframes shine{to{background-position:300% 0}}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+.zk{margin-top:22px;text-align:center;background:var(--card);border:2px solid var(--bd);border-radius:26px;padding:20px 18px;box-shadow:var(--sh);cursor:pointer}
+.zk.f{animation:fade .5s}
+.zi{margin:0 auto 6px;color:var(--ic)}.zi .ic{width:60px;height:60px}.k-k8{animation:spin 24s linear infinite}
+.zk small{display:block;color:var(--mut);font-weight:700;font-size:.85rem}
+.zk p{margin:8px 0 4px;font-size:1.2rem;font-weight:700;line-height:2}
+.zk em{font-style:normal;font-size:.8rem;color:var(--mut)}
+.ver{text-align:center;margin-top:18px;color:var(--mut);display:flex;flex-direction:column;align-items:center}
+.ver small{font-size:.8rem}.ver .by{font-size:.62rem;letter-spacing:.25em;opacity:.8}
+@keyframes spin{to{transform:rotate(360deg)}}
 </style>
 </head>
 <body>
@@ -127,6 +136,11 @@ const P = {
   x:'<path d="M6 6l12 12M18 6L6 18"/>',
   star:'<path d="M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9z"/>'
 };
+Object.assign(P, {
+  k8: '<path d="M12 2L14.1 6.9L19.1 4.9L17.1 9.9L22 12L17.1 14.1L19.1 19.1L14.1 17.1L12 22L9.9 17.1L4.9 19.1L6.9 14.1L2 12L6.9 9.9L4.9 4.9L9.9 6.9Z"/><circle cx="12" cy="12" r="2"/>',
+  moon: '<path d="M12 3a6 6 0 009 9 9 9 0 11-9-9z"/><path d="M17 3v4M15 5h4"/>',
+  dome: '<path d="M4 21V11a8 8 0 0116 0v10M2 21h20M12 3V1M9 21v-5a3 3 0 016 0v5"/>'
+});
 const ic = (n, c = '') => `<svg class="ic ${c}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${P[n]}</svg>`;
 
 // الألعاب: l = مغلقة. لفتح لعبة غيّر l إلى 0
@@ -180,6 +194,26 @@ function card(g, i) {
     ${g.l ? ic('lock', 'lockic') : `<button class="fav ${fav ? 'on' : ''}" data-a="fav" data-v="${g.id}" aria-label="المفضلة">${ic('heart')}</button>`}
   </div>`;
 }
+// أذكار وأحاديث صحيحة تتبدل كل 30 ثانية أو بالضغط عليها، والأيقونة الإسلامية تتبدل معها
+const Z = [
+  ['استغفار', 'أستغفر الله العظيم الذي لا إله إلا هو الحي القيوم وأتوب إليه', 'رواه أبو داود والترمذي'],
+  ['صلاة على النبي', 'اللهم صلِّ وسلِّم على نبينا محمد', ''],
+  ['حديث صحيح', 'من صلّى عليّ صلاةً صلّى الله عليه بها عشرًا', 'رواه مسلم'],
+  ['استغفار', 'أستغفر الله العظيم وأتوب إليه', ''],
+  ['حديث صحيح', 'إنما الأعمال بالنيات، وإنما لكل امرئ ما نوى', 'متفق عليه'],
+  ['ذكر', 'سبحان الله وبحمده، سبحان الله العظيم', 'متفق عليه'],
+  ['حديث صحيح', 'تبسّمك في وجه أخيك لك صدقة', 'رواه الترمذي'],
+  ['صلاة على النبي', 'صلى الله عليه وسلم', ''],
+  ['حديث صحيح', 'الكلمة الطيبة صدقة', 'متفق عليه'],
+  ['ذكر', 'لا حول ولا قوة إلا بالله، كنز من كنوز الجنة', 'متفق عليه'],
+  ['حديث صحيح', 'أحبّ الأعمال إلى الله أدومها وإن قلّ', 'متفق عليه'],
+  ['استغفار', 'أستغفر الله', '']
+];
+const ZI = ['k8', 'moon', 'dome'];
+let Zi = Math.random() * Z.length | 0;
+const zhtml = () => { const [t, x, s] = Z[Zi], k = ZI[Zi % 3]; return `<div class="zi">${ic(k, 'k-' + k)}</div><small>${t}</small><p>${x}</p>${s ? `<em>${s}</em>` : ''}`; };
+const zk = () => `<div class="zk" data-a="zk">${zhtml()}</div>`;
+const zup = () => { const e = $('.zk'); if (e) { e.innerHTML = zhtml(); e.classList.remove('f'); void e.offsetWidth; e.classList.add('f'); } };
 function games() {
   const r = g => g.l ? 3 : !fits(g) ? 2 : S.fav.includes(g.id) ? 0 : 1;
   const list = [...G].sort((x, y) => r(x) - r(y));
@@ -187,9 +221,7 @@ function games() {
   <p class="hint">${n() ? `عدد اللاعبين: ${n()}` : 'أضف اللاعبين من تبويب «تعديل الأسماء»'}</p>
   <button class="btn rnd" data-a="rand">${ic('dice')} لعبة عشوائية</button>
   ${list.map(card).join('')}
-  <div class="rate"><p>إذا أعجبتك الألعاب، فتقييمك يجعلنا نبتسم</p>
-    <div class="stars">${[1,2,3,4,5].map(k => `<button data-a="star" data-v="${k}" class="${k <= S.rate ? 'on' : ''}" aria-label="${k}">${ic('star')}</button>`).join('')}</div>
-    <button class="btn ghost" data-a="rate">قيّم الموقع</button><small>الإصدار 1.0.0</small></div>`;
+  ${zk()}<div class="ver"><small>الإصدار 1.2.2</small><small class="by">NIDAL</small></div>`;
 }
 function names() {
   return `<h2>أدخل أسماء اللاعبين</h2>
@@ -286,6 +318,8 @@ window.gameRes = {
   round: id => { gameRes.get(id).rounds++; save(); },
   reset: id => { gameRes.get(id); S.g[id] = {pts: {}, rounds: 0}; save(); }
 };
+A.zk = () => { Zi = (Zi + 1) % Z.length; zup(); };
+setInterval(() => { if (!document.hidden && $('.zk')) { Zi = (Zi + 1) % Z.length; zup(); } }, 30000);
 // البداية
 $('header').innerHTML = `<h1>ألعاب جماعية</h1><button data-a="settings" aria-label="الإعدادات">${ic('set')}</button>`;
 $('nav').innerHTML = [['res','cup','النتائج','results'], ['games','home','قائمة الألعاب','tab'], ['names','users','تعديل الأسماء','tab']]
