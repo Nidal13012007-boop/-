@@ -27,6 +27,7 @@ h2{text-align:center;font-size:1.6rem;margin:10px 0 2px;font-weight:900}
 .ic{width:24px;height:24px}.sm{width:16px;height:16px}
 .btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;border:0;border-radius:18px;padding:14px;font:700 1.05rem Cairo,sans-serif;background:var(--pbg);color:var(--on);box-shadow:var(--sh);cursor:pointer;transition:transform .15s}
 .btn:active{transform:scale(.96)}
+.vsgo{position:sticky;bottom:calc(12px + env(safe-area-inset-bottom,0px));z-index:3}
 .ghost{background:transparent;color:var(--t);border:2px solid var(--bd);box-shadow:none}
 .danger{background:#e5484d;color:#fff;margin:14px 0 8px}
 .rnd{margin-bottom:16px;animation:pulse 2.4s infinite}
@@ -203,8 +204,8 @@ const G = [
   {id:'bara', n:'برا السالفة', i:'eye', a:3, b:12, l:0},
   {id:'ghamza', n:'غمزة', i:'wink', a:5, b:12, l:1},
   {id:'tahqiq', n:'تحقيق', i:'search', a:4, b:12, l:1},
-  {id:'xo', n:'إكس أو المتحركة', i:'xo', a:2, b:12, s:'2', l:0},
-  {id:'c4', n:'أربعة على التوالي', i:'c4', a:2, b:12, s:'2', l:0},
+  {id:'xo', n:'إكس أو المتحركة', i:'xo', a:1, b:12, s:'1-2', l:0},
+  {id:'c4', n:'أربعة على التوالي', i:'c4', a:1, b:12, s:'1-2', l:0},
   {id:'pent', n:'Pentago (بينتاغو)', i:'pent', a:1, b:12, s:'1-2', l:0}
 ];
 const gm = id => G.find(g => g.id === id);
@@ -279,7 +280,7 @@ function games() {
   <p class="hint">${n() ? `عدد اللاعبين: ${n()}` : 'أضف اللاعبين من تبويب «تعديل الأسماء»'}</p>
   <button class="btn rnd" data-a="rand">${ic('dice')} لعبة عشوائية</button>
   ${list.map(card).join('')}
-  ${zk()}<div class="ver"><small>الإصدار 1.2.3</small><small class="by">NIDAL</small></div>`;
+  ${zk()}<div class="ver"><small>الإصدار 1.3.0</small><small class="by">NIDAL</small></div>`;
 }
 function names() {
   return `<h2>أدخل أسماء اللاعبين</h2>
@@ -654,6 +655,21 @@ window.openGame = id => {
 })();
 </script>
 <script>
+/* مساعد مشترك: واجهة اللعب ضد الحاسوب للألعاب الثنائية */
+window.vsLV = {easy: 'سهل', mid: 'متوسط', hard: 'صعب'};
+window.vsUI = (a, C, ns, sides, pvp) => {
+  const ch = (on, k, v, l) => `<button class="chip ${on ? 'on' : ''}" data-${a}="${k}" data-v="${v}">${l}</button>`;
+  return `<div class="sec" style="margin-top:14px"><h4>نمط اللعب</h4><div class="chips">${ch(C.mode === 'pvp', 'm', 'pvp', 'لاعبان على الجهاز')}${ch(C.mode === 'ai', 'm', 'ai', 'ضد الحاسوب')}</div></div>` + (C.mode === 'pvp' ? pvp :
+    `<div class="sec"><h4>اسمك</h4><div class="chips">${ns.map(x => ch(C.H === x, 'p', 'H|' + esc(x), esc(x))).join('')}</div></div>
+    <div class="sec"><h4>لونك</h4><div class="chips">${sides.map(([k, l]) => ch(C.me === k, 's', k, l)).join('')}</div></div>
+    <div class="sec"><h4>مستوى الصعوبة</h4><div class="chips">${Object.keys(vsLV).map(k => ch(C.lvl === k, 'l', k, vsLV[k])).join('')}</div></div>`);
+};
+window.vsX = (X, C, setup) => {
+  X.m = v => { if (v === 'pvp' && S.names.length < 2) return toast('أضف لاعباً ثانياً من «تعديل الأسماء» أو العب ضد الحاسوب'); C.mode = v; setup(); };
+  X.l = v => { C.lvl = v; setup(); }; X.s = v => { C.me = v; setup(); };
+};
+</script>
+<script>
 /* لعبة إكس أو المتحركة: لكل لاعب 3 علامات، وتختفي الأقدم عند وضع الرابعة */
 (() => {
 const st = document.createElement('style');
@@ -712,33 +728,33 @@ const snd = (k, s) => {
     g.gain.value = .5; src.connect(f).connect(g).connect(ac.destination); src.start(t);
   } catch (e) {}
 };
-const C = {x: null, o: null}; let xo, M;
+const C = {x: null, o: null, mode: 'pvp', lvl: 'mid', me: 'X', H: null}; let xo, M;
 const put = (t, b) => { xo.innerHTML = `<div class="w"><div class="bt"><b>${t}</b><button class="xb" data-x="x" aria-label="خروج">${ic('x')}</button></div>${b}</div>`; xo.scrollTop = 0; };
 const X = {};
 
 function setup() {
   M = null; const ns = S.names;
-  if (ns.length < 2) { xo.style.display = 'none'; return toast('تحتاج لاعبين اثنين على الأقل'); }
-  if (!ns.includes(C.x)) C.x = ns[0];
-  if (!ns.includes(C.o) || C.o === C.x) C.o = ns.find(x => x !== C.x);
+  if (!ns.length) { xo.style.display = 'none'; return toast('أضف أسماء اللاعبين أولاً'); }
+  if (ns.length < 2) C.mode = 'ai'; if (!ns.includes(C.H)) C.H = ns[0];
+  if (ns.length > 1) { if (!ns.includes(C.x)) C.x = ns[0]; if (!ns.includes(C.o) || C.o === C.x) C.o = ns.find(x => x !== C.x); }
   const row = k => ns.map(x => `<button class="chip ${C[k] === x ? 'on' : ''}" data-x="p" data-v="${k}|${esc(x)}">${esc(x)}</button>`).join('');
   put('إكس أو المتحركة', `<button class="btn ghost" data-x="res">نتائج اللعبة</button>
-  <div class="sec" style="margin-top:14px"><h4>لاعب X (يبدأ أولاً)</h4><div class="chips">${row('x')}</div></div>
-  <div class="sec"><h4>لاعب O</h4><div class="chips">${row('o')}</div></div>
+  ${vsUI('x', C, ns, [['X', 'X (تبدأ أنت)'], ['O', 'O (يبدأ الحاسوب)']], `<div class="sec"><h4>لاعب X (يبدأ أولاً)</h4><div class="chips">${row('x')}</div></div><div class="sec"><h4>لاعب O</h4><div class="chips">${row('o')}</div></div>`)}
   <div class="sec"><h4>القوانين</h4><p class="hint" style="text-align:start">لكل لاعب 3 علامات فقط على اللوحة. عند وضع العلامة الرابعة تختفي أقدم علامة لديه. من يكوّن 3 علامات متتالية يفوز، والتعادل بعد 20 حركة دون فائز.</p></div>
-  <button class="btn" data-x="go">ابدأ المباراة</button>`);
+  <button class="btn vsgo" data-x="go">ابدأ المباراة</button>`);
 }
-X.p = v => { const i = v.indexOf('|'), k = v.slice(0, i), n = v.slice(i + 1), o = k === 'x' ? 'o' : 'x'; if (C[o] === n) C[o] = C[k]; C[k] = n; setup(); };
+X.p = v => { const i = v.indexOf('|'), k = v.slice(0, i), n = v.slice(i + 1), o = k === 'x' ? 'o' : 'x'; if (k === 'H') C.H = n; else { if (C[o] === n) C[o] = C[k]; C[k] = n; } setup(); }; vsX(X, C, setup);
 X.go = () => start(); X.again = () => start(); X.setup = setup;
 X.x = () => { M = null; xo.style.display = 'none'; };
 
 function start() {
-  M = {pl: {X: C.x, O: C.o}, b: Array(9).fill(''), q: {X: [], O: []}, t: 'X', n: 0, over: false, line: null};
+  const ai = C.mode === 'ai', cp = 'الحاسوب (' + vsLV[C.lvl] + ')';
+  M = {pl: ai ? (C.me === 'X' ? {X: C.H, O: cp} : {X: cp, O: C.H}) : {X: C.x, O: C.o}, b: Array(9).fill(''), q: {X: [], O: []}, t: 'X', n: 0, over: false, line: null, ai, aiS: C.me === 'X' ? 'O' : 'X', lvl: C.lvl};
   put('إكس أو المتحركة', `<div class="xpl" id="xpl"></div><p class="xt" id="xt"></p>
   <div class="xg">${[...Array(9)].map((_, i) => `<button class="xc" data-x="c" data-v="${i}" aria-label="الخانة ${i + 1}"><span class="xn">${i + 1}</span><span class="xm"></span></button>`).join('')}</div>
   <p class="hint" id="xmsg"></p><p class="hint" id="xcnt"></p><div id="xres"></div>
   <button class="btn ghost" id="xend" data-x="setup">إنهاء المباراة</button>`);
-  upd();
+  upd(); maybeAI();
 }
 const ghost = (i, s) => { const c = xo.querySelectorAll('.xc')[i], g = document.createElement('span'); g.className = 'gh'; g.innerHTML = `<span class="xm m${s}">${mk(s)}</span>`; c.appendChild(g); setTimeout(() => g.remove(), 520); };
 function upd(fresh = -1, gone = -1, who = '') {
@@ -752,7 +768,7 @@ function upd(fresh = -1, gone = -1, who = '') {
   $('#xpl').innerHTML = ['X', 'O'].map(s => { const q = M.q[s]; return `<div class="xp ${!M.over && M.t === s ? 'on' : ''}"><b><span class="xs m${s}">${mk(s)}</span>${esc(M.pl[s])}</b><div class="xq">${[0, 1, 2].map(k => q[k] === undefined ? '<i></i>' : `<i class="f ${s}${q.length === 3 && !k ? ' old' : ''}">${q[k] + 1}</i>`).join('')}</div></div>`; }).join('');
   $('#xt').innerHTML = M.over ? '' : `الدور على <b>${esc(M.pl[M.t])}</b><span class="xs m${M.t}">${mk(M.t)}</span>`;
   const q = M.q[M.t];
-  $('#xmsg').textContent = M.n ? '' : 'ضع علامتك في أي خانة فارغة';
+  $('#xmsg').textContent = M.over ? '' : M.ai && M.t === M.aiS ? 'الحاسوب يفكر…' : M.n ? '' : 'ضع علامتك في أي خانة فارغة';
   $('#xcnt').textContent = `الحركة ${M.n} من 20`;
 }
 function play(i) {
@@ -764,18 +780,48 @@ function play(i) {
   snd('put', s);
   if (line || M.n >= 20) return finish(line ? s : null, line, i, gone);
   M.t = s === 'X' ? 'O' : 'X'; upd(i, gone, M.pl[s]);
-  vib(gone >= 0 ? [20, 30, 20] : 15);
+  vib(gone >= 0 ? [20, 30, 20] : 15); maybeAI();
 }
-X.c = v => play(+v);
+X.c = v => { if (M && M.ai && M.t === M.aiS) return; play(+v); };
+// ذكاء الحاسوب: بحث ألفا-بيتا يراعي اختفاء أقدم علامة
+const sm = (b, q, s, i) => { const nb = b.slice(), nq = {X: q.X.slice(), O: q.O.slice()}; nb[i] = s; nq[s].push(i); if (nq[s].length > 3) nb[nq[s].shift()] = ''; return [nb, nq]; };
+const won = (b, s) => WL.some(l => l.every(k => b[k] === s));
+function ng(b, q, s, d, a, bt, n) {
+  let best = -1e9;
+  for (let i = 0; i < 9; i++) if (!b[i]) {
+    const [nb, nq] = sm(b, q, s, i);
+    const v = won(nb, s) ? 100 + d : n + 1 >= 20 || d <= 1 ? 0 : -ng(nb, nq, s === 'X' ? 'O' : 'X', d - 1, -bt, -a, n + 1);
+    if (v > best) best = v; if (best > a) a = best; if (a >= bt) break;
+  }
+  return best;
+}
+function maybeAI() {
+  if (!M || !M.ai || M.over || M.t !== M.aiS) return;
+  const m = M;
+  setTimeout(() => {
+    if (M !== m || m.over) return;
+    const s = m.aiS, o = s === 'X' ? 'O' : 'X', em = [...Array(9).keys()].filter(i => !m.b[i]);
+    let pk;
+    if (m.lvl === 'easy' && Math.random() < .4) pk = em[Math.random() * em.length | 0];
+    else {
+      const D = {easy: 2, mid: 4, hard: 10}[m.lvl];
+      const sc = em.map(i => { const [nb, nq] = sm(m.b, m.q, s, i); return [i, won(nb, s) ? 100 + D : m.n + 1 >= 20 ? 0 : -ng(nb, nq, o, D, -1e9, 1e9, m.n + 1) + (i === 4 ? .1 : 0)]; });
+      const mx = Math.max(...sc.map(x => x[1])), bs = sc.filter(x => x[1] >= mx - .05);
+      pk = bs[Math.random() * bs.length | 0][0];
+    }
+    play(pk);
+  }, 600);
+}
 function finish(w, line, i, gone) {
   M.over = true; M.line = line || null;
   const r = gameRes.get('xo'); r.st = r.st || {};
   ['X', 'O'].forEach(s => {
+    if (M.ai && s === M.aiS) return;
     const n = M.pl[s], t = r.st[n] = r.st[n] || {p: 0, w: 0, l: 0, d: 0, xw: 0, ow: 0};
     t.p++; if (!w) t.d++; else if (w === s) { t.w++; t[s.toLowerCase() + 'w']++; } else t.l++;
-    gameRes.add('xo', n, w === s ? 1 : 0);
+    if (!M.ai) gameRes.add('xo', n, w === s ? 1 : 0);
   });
-  if (w) addPoints(M.pl[w], 1); else r.dr = (r.dr || 0) + 1;
+  if (!w) r.dr = (r.dr || 0) + 1; else if (!M.ai) addPoints(M.pl[w], 1);
   gameRes.round('xo'); save();
   upd(i, gone, M.pl[M.t]);
   $('#xend').style.display = 'none';
@@ -865,7 +911,7 @@ st.textContent = `#c4,#c4r{position:fixed;inset:0;z-index:15;background:var(--bg
 @keyframes c4w{to{transform:scale(1.08);opacity:.7}}`;
 document.head.appendChild(st);
 
-const C = {R: null, Y: null}; let c4, M;
+const C = {R: null, Y: null, mode: 'pvp', lvl: 'mid', me: 'R', H: null}; let c4, M;
 const X = {};
 const twice = (el, m, fn) => { if (!el.dataset.c) { el.dataset.c = 1; toast(m); setTimeout(() => el.dataset.c = '', 3000); } else fn(); };
 const put = (t, b) => { c4.innerHTML = `<div class="w"><div class="bt"><b>${t}</b><button class="xb" data-c="x" aria-label="خروج">${ic('x')}</button></div>${b}</div>`; c4.scrollTop = 0; };
@@ -883,35 +929,76 @@ const cellAt = i => c4.querySelectorAll('.c4c')[(i % COLS) * ROWS + (i / COLS | 
 
 function setup() {
   M = null; const ns = S.names;
-  if (ns.length < 2) { c4.style.display = 'none'; return toast('تحتاج لاعبين اثنين على الأقل'); }
-  if (!ns.includes(C.R)) C.R = ns[0];
-  if (!ns.includes(C.Y) || C.Y === C.R) C.Y = ns.find(x => x !== C.R);
+  if (!ns.length) { c4.style.display = 'none'; return toast('أضف أسماء اللاعبين أولاً'); }
+  if (ns.length < 2) C.mode = 'ai'; if (!ns.includes(C.H)) C.H = ns[0];
+  if (ns.length > 1) { if (!ns.includes(C.R)) C.R = ns[0]; if (!ns.includes(C.Y) || C.Y === C.R) C.Y = ns.find(x => x !== C.R); }
   const row = k => ns.map(x => `<button class="chip ${C[k] === x ? 'on' : ''}" data-c="p" data-v="${k}|${esc(x)}">${esc(x)}</button>`).join('');
   put('أربعة على التوالي', `<button class="btn ghost" data-c="res">نتائج اللعبة</button>
-  <div class="sec" style="margin-top:14px"><h4><span class="c4s R"></span>اللاعب الأحمر (يبدأ أولاً)</h4><div class="chips">${row('R')}</div></div>
-  <div class="sec"><h4><span class="c4s Y"></span>اللاعب الأصفر</h4><div class="chips">${row('Y')}</div></div>
+  ${vsUI('c', C, ns, [['R', 'أحمر (تبدأ أنت)'], ['Y', 'أصفر (يبدأ الحاسوب)']], `<div class="sec"><h4><span class="c4s R"></span>اللاعب الأحمر (يبدأ أولاً)</h4><div class="chips">${row('R')}</div></div><div class="sec"><h4><span class="c4s Y"></span>اللاعب الأصفر</h4><div class="chips">${row('Y')}</div></div>`)}
   <div class="sec"><h4>القوانين</h4><p class="hint" style="text-align:start">يتناوب اللاعبان على إسقاط قرص في أحد الأعمدة السبعة، فيسقط إلى أدنى خانة فارغة. أول من يكوّن 4 أقراص متتالية من لونه أفقياً أو عمودياً أو قطرياً يفوز. وإذا امتلأت الشبكة دون فائز تنتهي المباراة بالتعادل.</p></div>
-  <button class="btn" data-c="go">ابدأ المباراة</button>`);
+  <button class="btn vsgo" data-c="go">ابدأ المباراة</button>`);
 }
-X.p = v => { const i = v.indexOf('|'), k = v.slice(0, i), n = v.slice(i + 1), o = k === 'R' ? 'Y' : 'R'; if (C[o] === n) C[o] = C[k]; C[k] = n; setup(); };
+X.p = v => { const i = v.indexOf('|'), k = v.slice(0, i), n = v.slice(i + 1), o = k === 'R' ? 'Y' : 'R'; if (k === 'H') C.H = n; else { if (C[o] === n) C[o] = C[k]; C[k] = n; } setup(); }; vsX(X, C, setup);
 X.go = () => start(); X.again = () => start(); X.restart = () => start(); X.setup = setup;
 X.x = () => { M = null; c4.style.display = 'none'; };
-X.d = v => drop(+v);
+X.d = v => { if (M && M.ai && M.t === M.aiS) return; drop(+v); };
+// ذكاء الحاسوب: negamax مع ألفا-بيتا وتقييم النوافذ الرباعية
+const WS = [];
+for (let r = 0; r < ROWS; r++) for (let c = 0; c < COLS; c++) for (const [dy, dx] of [[0, 1], [1, 0], [1, 1], [1, -1]]) {
+  const w = []; for (let k = 0; k < 4; k++) { const y = r + dy * k, x = c + dx * k; if (y > 5 || x < 0 || x > 6) break; w.push(y * COLS + x); }
+  if (w.length === 4) WS.push(w);
+}
+const WC = Array.from({length: 42}, () => []); WS.forEach(w => w.forEach(i => WC[i].push(w)));
+const low = (b, c) => { for (let r = ROWS - 1; r >= 0; r--) if (!b[r * COLS + c]) return r; return -1; };
+const ORD = [3, 2, 4, 1, 5, 0, 6];
+const ev = (b, s) => {
+  const o = s === 'R' ? 'Y' : 'R'; let v = 0;
+  for (const w of WS) { let a = 0, p = 0; for (const i of w) { if (b[i] === s) a++; else if (b[i] === o) p++; } if (a && p) continue; v += a ? (a === 3 ? 5 : a === 2 ? 2 : 0) : p === 3 ? -5 : p === 2 ? -2 : 0; }
+  for (let r = 0; r < ROWS; r++) { const x = b[r * COLS + 3]; if (x === s) v += 3; else if (x === o) v -= 3; }
+  return v;
+};
+const nm = (b, s, d, a, bt) => {
+  const o = s === 'R' ? 'Y' : 'R'; let best = -1e9;
+  for (const c of ORD) {
+    const r = low(b, c); if (r < 0) continue; const i = r * COLS + c; b[i] = s;
+    const v = WC[i].some(w => w.every(k => b[k] === s)) ? 1e5 + d : d <= 1 ? ev(b, s) : -nm(b, o, d - 1, -bt, -a);
+    b[i] = ''; if (v > best) best = v; if (best > a) a = best; if (a >= bt) break;
+  }
+  return best === -1e9 ? 0 : best;
+};
+function maybeAI() {
+  if (!M || !M.ai || M.over || M.busy || M.t !== M.aiS) return;
+  const m = M;
+  setTimeout(() => {
+    if (M !== m || m.over || m.busy) return;
+    const s = m.aiS, o = s === 'R' ? 'Y' : 'R', b = m.b.slice(), cs = ORD.filter(c => low(b, c) >= 0); let c;
+    if (m.lvl === 'easy' && Math.random() < .35) c = cs[Math.random() * cs.length | 0];
+    else {
+      const D = {easy: 1, mid: 3, hard: 6}[m.lvl];
+      const sc = cs.map(k => { const i = low(b, k) * COLS + k; b[i] = s; const v = WC[i].some(w => w.every(j => b[j] === s)) ? 1e5 + D : -nm(b, o, D, -1e9, 1e9); b[i] = ''; return [k, v]; });
+      const mx = Math.max(...sc.map(x => x[1])), bs = sc.filter(x => x[1] >= mx - (m.lvl === 'hard' ? 0 : 1));
+      c = (m.lvl === 'hard' ? bs[0] : bs[Math.random() * bs.length | 0])[0];
+    }
+    drop(c);
+  }, 550);
+}
 
 function start() {
-  M = {pl: {R: C.R, Y: C.Y}, b: Array(ROWS * COLS).fill(''), t: 'R', n: 0, over: false, busy: false};
+  const ai = C.mode === 'ai', cp = 'الحاسوب (' + vsLV[C.lvl] + ')';
+  M = {pl: ai ? (C.me === 'R' ? {R: C.H, Y: cp} : {R: cp, Y: C.H}) : {R: C.R, Y: C.Y}, b: Array(ROWS * COLS).fill(''), t: 'R', n: 0, over: false, busy: false, ai, aiS: C.me === 'R' ? 'Y' : 'R', lvl: C.lvl};
   const cols = [...Array(COLS)].map((_, c) => `<button class="c4col" data-c="d" data-v="${c}" aria-label="العمود ${c + 1}">${'<span class="c4c"></span>'.repeat(ROWS)}<i class="pv"></i></button>`).join('');
   put('أربعة على التوالي', `<div class="c4pl" id="c4pl"></div><p class="c4t" id="c4t"></p>
   <div class="c4a"><div class="c4g tR" id="c4g">${cols}</div></div>
   <p class="hint" id="c4m">اضغط على أي عمود لإسقاط القرص</p><div id="c4res"></div>
   <button class="btn ghost" id="c4rs" data-c="restart">إعادة البدء</button><button class="btn ghost" id="c4end" data-c="setup">إنهاء المباراة</button>`);
-  upd();
+  upd(); maybeAI();
 }
 function upd() {
   const stt = gameRes.get('c4').st || {}, wins = n => (stt[n] || {}).w || 0;
-  $('#c4pl').innerHTML = ['R', 'Y'].map(s => `<div class="c4p ${!M.over && M.t === s ? 'on' : ''}"><span class="c4s ${s}"></span><div><b>${esc(M.pl[s])}</b><small>${wins(M.pl[s])} فوز</small></div></div>`).join('');
+  $('#c4pl').innerHTML = ['R', 'Y'].map(s => `<div class="c4p ${!M.over && M.t === s ? 'on' : ''}"><span class="c4s ${s}"></span><div><b>${esc(M.pl[s])}</b><small>${M.ai && s === M.aiS ? 'حاسوب' : wins(M.pl[s]) + ' فوز'}</small></div></div>`).join('');
   $('#c4t').innerHTML = M.over ? '' : `الدور على <b>${esc(M.pl[M.t])}</b><span class="c4s ${M.t}"></span>`;
-  $('#c4g').className = 'c4g t' + M.t + (M.busy || M.over ? ' off' : '');
+  $('#c4g').className = 'c4g t' + M.t + (M.busy || M.over || (M.ai && M.t === M.aiS) ? ' off' : '');
+  $('#c4m').textContent = M.over ? '' : M.ai && M.t === M.aiS ? 'الحاسوب يفكر…' : M.n ? '' : 'اضغط على أي عمود لإسقاط القرص';
   c4.querySelectorAll('.c4col').forEach((el, c) => el.classList.toggle('full', !!M.b[c]));
 }
 function findWin(r, c, s) {
@@ -944,18 +1031,19 @@ function drop(c) {
     if (M !== m) return;
     m.busy = false;
     if (line || m.n === ROWS * COLS) return finish(line ? s : null, line);
-    m.t = s === 'R' ? 'Y' : 'R'; upd();
+    m.t = s === 'R' ? 'Y' : 'R'; upd(); maybeAI();
   }, ms);
 }
 function finish(w, line) {
   M.over = true;
   const r = gameRes.get('c4'); r.st = r.st || {};
   ['R', 'Y'].forEach(s => {
+    if (M.ai && s === M.aiS) return;
     const n = M.pl[s], t = r.st[n] = r.st[n] || {p: 0, w: 0, l: 0, d: 0, rw: 0, yw: 0};
     t.p++; if (!w) t.d++; else if (w === s) { t.w++; t[s.toLowerCase() + 'w']++; } else t.l++;
-    gameRes.add('c4', n, w === s ? 1 : 0);
+    if (!M.ai) gameRes.add('c4', n, w === s ? 1 : 0);
   });
-  if (w) addPoints(M.pl[w], 1); else r.dr = (r.dr || 0) + 1;
+  if (!w) r.dr = (r.dr || 0) + 1; else if (!M.ai) addPoints(M.pl[w], 1);
   gameRes.round('c4'); save();
   if (line) line.forEach(i => cellAt(i).classList.add('wn'));
   upd();
@@ -1104,8 +1192,8 @@ const X = {};
 
 const st = document.createElement('style');
 st.textContent = `#pn,#pnr,#pnh{position:fixed;inset:0;z-index:15;background:var(--bg);overflow:auto}
-#pn{padding:calc(env(safe-area-inset-top,0px) + 14px) 16px calc(40px + env(safe-area-inset-bottom,0px));display:none;--q1:#8E2430;--q2:#5E141D;--hole:#2a070c}
-[data-theme=jahili] #pn{--q1:#7A4A22;--q2:#4A2C14;--hole:#2A1A0E}
+#pn{padding:calc(env(safe-area-inset-top,0px) + 14px) 16px calc(40px + env(safe-area-inset-bottom,0px));display:none;--q1:#E0AE6B;--q2:#BC803F;--hole:#6E4220;--hole2:#8F5E33}
+[data-theme=jahili] #pn{--q1:#E0AE6B;--q2:#BC803F;--hole:#6E4220;--hole2:#8F5E33}
 #pnr,#pnh{z-index:18;animation:fade .2s}
 #pn .w{max-width:560px;margin:auto;animation:up .35s both}
 #pn .btn{margin-top:10px}
@@ -1129,21 +1217,21 @@ st.textContent = `#pn,#pnr,#pnh{position:fixed;inset:0;z-index:15;background:var
 .pnw{display:flex;flex-direction:column;gap:8px;min-width:0}
 .pnw.bot{flex-direction:column-reverse}
 .pnl{display:flex;gap:8px}
-.pnb{flex:1;min-width:0;display:flex;align-items:center;justify-content:center;gap:4px;min-height:38px;padding:4px;border:2px solid var(--bd);background:var(--card);color:var(--t);border-radius:14px;font:700 .78rem Cairo,sans-serif;cursor:pointer;transition:.2s;touch-action:manipulation}
-.pnb svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.pnb{flex:1;min-width:0;display:flex;align-items:center;justify-content:center;gap:4px;min-height:44px;padding:4px;border:2px solid var(--bd);background:var(--card);color:var(--t);border-radius:14px;font:700 .78rem Cairo,sans-serif;cursor:pointer;transition:.2s;touch-action:manipulation}
+.pnb svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round;flex:none}
 .png:not(.p2) .pnb,.png.lk .pnb{opacity:.4}
-.png.p2:not(.lk) .pnb{border-color:var(--ic);animation:pulse 1.4s infinite}
+.png.p2:not(.lk) .pnb{background:var(--pbg);color:var(--on);border-color:transparent;box-shadow:var(--sh);animation:pulse 1.6s infinite}
 .png.lk{pointer-events:none}
-.pnq{position:relative;display:grid;grid-template-columns:repeat(3,1fr);gap:3%;padding:4%;aspect-ratio:1;border-radius:14px;background:linear-gradient(145deg,var(--q1),var(--q2));box-shadow:0 6px 14px rgba(0,0,0,.3),inset 0 2px 3px rgba(255,255,255,.18);transition:transform .5s cubic-bezier(.45,.05,.25,1),box-shadow .2s}
-.pnq.spin{z-index:5}
-.pnl:hover+.pnq,.pnl:focus-within+.pnq,.pnw.hot .pnq{box-shadow:0 0 0 3px #FFD34D,0 0 18px rgba(255,211,77,.75),0 6px 14px rgba(0,0,0,.3)}
+.pnq{position:relative;display:grid;grid-template-columns:repeat(3,1fr);gap:3%;padding:4%;aspect-ratio:1;border-radius:16px;background:repeating-radial-gradient(circle at 50% 50%,rgba(255,255,255,.05) 0 7px,transparent 7px 14px),radial-gradient(circle at 50% 50%,var(--q1),var(--q2) 115%);box-shadow:0 0 0 2px rgba(0,0,0,.35),0 0 16px rgba(0,0,0,.4),inset 0 0 0 2px rgba(255,255,255,.12),inset 0 0 14px rgba(0,0,0,.35);transform:rotate(var(--r,0deg));scale:1;transition:scale .2s,box-shadow .2s}
+.pnq.spin{z-index:5;scale:1.05;box-shadow:0 0 0 2px rgba(0,0,0,.35),0 0 30px rgba(0,0,0,.55),inset 0 0 0 2px rgba(255,255,255,.12)}
+.pnl:hover+.pnq,.pnl:focus-within+.pnq,.pnw.hot .pnq{box-shadow:0 0 0 3px #FFD34D,0 0 18px rgba(255,211,77,.75),0 0 14px rgba(0,0,0,.3)}
 .pnc{position:relative;display:block;aspect-ratio:1;min-width:0;padding:0;border:0;background:none;cursor:pointer;touch-action:manipulation}
 .pnc.s1,.pnc.s2{cursor:default}
-.pnc::before{content:"";position:absolute;inset:7%;border-radius:50%;background:radial-gradient(circle at 50% 35%,#3d0f16,var(--hole));box-shadow:inset 0 3px 6px rgba(0,0,0,.6),0 1px 0 rgba(255,255,255,.14)}
+.pnc::before{content:"";position:absolute;inset:7%;border-radius:50%;background:radial-gradient(circle at 50% 35%,var(--hole2),var(--hole));box-shadow:inset 0 3px 6px rgba(0,0,0,.6),0 1px 0 rgba(255,255,255,.14)}
 .pns{position:absolute;inset:11%;border-radius:50%;pointer-events:none}
-.pnc.s1 .pns{background:radial-gradient(circle at 32% 28%,#7a7a7a,#161616 48%,#000);box-shadow:0 3px 5px rgba(0,0,0,.55)}
+.pnc.s1 .pns{background:radial-gradient(circle at 32% 28%,#7a7a7a,#161616 48%,#000);box-shadow:0 0 0 2px rgba(255,255,255,.3),0 3px 5px rgba(0,0,0,.55)}
 .pnc.s2 .pns{background:radial-gradient(circle at 32% 28%,#fff,#e6e6e6 50%,#b0b0b0);box-shadow:0 3px 5px rgba(0,0,0,.45)}
-.pns.new{animation:pnd .4s cubic-bezier(.3,1.4,.5,1) both}
+.pns.new{animation:pnd .4s cubic-bezier(.3,1.4,.5,1) both}.pns,.pnc::before{rotate:calc(var(--r,0deg)*-1)}.pnc.s1 .pns::after,.pnc.s2 .pns::after{content:"";position:absolute;left:20%;top:13%;width:34%;height:24%;border-radius:50%;background:rgba(255,255,255,.5);filter:blur(1px);transform:rotate(-28deg)}.pnc.s1 .pns::after{background:rgba(255,255,255,.3)}.png.p2:not(.lk) .pnq{touch-action:none;cursor:grab}.pnq.spin{cursor:grabbing}
 .pnc.lp::after,.pnc.wn::after{content:"";position:absolute;inset:3%;z-index:2;border-radius:50%;border:2px solid #FFD34D;pointer-events:none}
 .pnc.wn::after{border-width:3px;box-shadow:0 0 12px 2px #FFD34D;animation:pnw .6s ease-in-out infinite alternate}
 @media(hover:hover){.png.p1.t1:not(.lk) .pnc.e:hover .pns{background:#111;opacity:.5}.png.p1.t2:not(.lk) .pnc.e:hover .pns{background:#fff;opacity:.55}}
@@ -1198,7 +1286,7 @@ function setup() {
        <div class="sec"><h4>مستوى الصعوبة</h4><div class="chips">${['easy', 'mid', 'hard'].map(k => chip(cfg.lvl === k, 'l|' + k, LV[k])).join('')}</div></div>`}
   <div class="sec"><h4>القوانين</h4><p class="hint" style="text-align:start">يتكوّن كل دور من مرحلتين: ضع حجرك في خانة فارغة، ثم دوّر أحد المربعات الأربعة 90 درجة يميناً أو يساراً (التدوير إلزامي). أول من يكوّن 5 أحجار متتالية من لونه أفقياً أو عمودياً أو قطرياً يفوز، ويُفحص الفوز بعد اكتمال الدور. إذا كوّن اللاعبان خمسة معاً أو امتلأت اللوحة دون فائز فالنتيجة تعادل.</p>
   <button class="btn ghost" data-n="help">شرح تفصيلي مع رسوم توضيحية</button></div>
-  <button class="btn" data-n="go">ابدأ المباراة</button><button class="btn ghost" data-n="names">تغيير أسماء اللاعبين</button>`);
+  <button class="btn vsgo" data-n="go">ابدأ المباراة</button><button class="btn ghost" data-n="names">تغيير أسماء اللاعبين</button>`);
 }
 X.m = v => { if (v === 'pvp' && S.names.length < 2) return toast('أضف لاعباً ثانياً من «تعديل الأسماء» أو العب ضد الحاسوب'); cfg.mode = v; setup(); };
 X.c = v => { cfg.me = +v; setup(); };
@@ -1247,27 +1335,34 @@ function upd() {
   $('#png').className = 'png p' + M.phase + ' t' + M.t + (locked() ? ' lk' : '');
   const aiT = M.ai && M.t === M.aiC && !M.over;
   $('#pnm').textContent = M.over ? '' : aiT ? (M.phase === 1 ? 'الحاسوب يفكر…' : 'الحاسوب يدوّر…')
-    : M.phase === 1 ? 'اختر خانة فارغة لوضع حجرك' : 'الآن دوّر أحد المربعات الأربعة يميناً أو يساراً (التدوير إلزامي)';
+    : M.phase === 1 ? 'اختر خانة فارغة لوضع حجرك' : 'دوّر أي مربع: اسحبه بإصبعك أو اضغط يمين/يسار. للتراجع اضغط حجرك الأخير';
 }
 function doPlace(i) {
   const s = M.t; M.b[i] = s; M.n++; M.last = i; M.phase = 2;
   tone(s === 1 ? 420 : 560, 230, .11); vib(15);
   paint(i); upd();
 }
-function doRotate(q, d) {
+const rm = matchMedia('(prefers-reduced-motion:reduce)').matches;
+const setR = (el, v) => el.style.setProperty('--r', v + 'deg');
+const ease = t => { t--; return 1 + 2.2 * t * t * t + 1.2 * t * t; };
+const spin = (el, from, to, ms, done) => {
+  const t0 = performance.now();
+  const f = now => { const k = Math.min(1, (now - t0) / ms); setR(el, from + (to - from) * ease(k)); k < 1 ? requestAnimationFrame(f) : done(); };
+  requestAnimationFrame(f);
+};
+function doRotate(q, d, from = 0) {
   const m = M; m.busy = true; upd();
-  const el = QE[q]; el.classList.add('spin'); el.style.transform = `rotate(${d * 90}deg)`;
+  const el = QE[q], to = d * 90; el.classList.add('spin');
   tone(260, 620, .3, 'sine', .1); vib(20);
-  setTimeout(() => {
+  spin(el, from, to, rm ? 1 : 160 + 300 * Math.abs(to - from) / 90, () => {
     if (M !== m) return;
     m.b = rotQ(m.b, q, d); m.last = -1;
-    el.style.transition = 'none'; el.style.transform = ''; el.classList.remove('spin');
-    paint(); void el.offsetWidth; el.style.transition = '';
+    paint(); setR(el, 0); el.classList.remove('spin');
     WE.forEach(w => w.classList.remove('hot'));
     const wm = winMask(m.b);
     if (wm || m.n === 36) return finish(wm === 3 ? 0 : wm, wm);
     m.t = 3 - m.t; m.phase = 1; m.busy = false; upd(); maybeAI();
-  }, 520);
+  });
 }
 function maybeAI() {
   if (!M.ai || M.t !== M.aiC || M.over) return;
@@ -1279,14 +1374,15 @@ function maybeAI() {
     setTimeout(() => {
       if (M !== m) return;
       WE[mv.q].classList.add('hot');
-      setTimeout(() => { if (M === m) doRotate(mv.q, mv.d); }, 500);
-    }, 550);
-  }, 450);
+      setTimeout(() => { if (M === m) doRotate(mv.q, mv.d); }, 380);
+    }, 420);
+  }, 380);
 }
 X.cell = v => {
   if (!M || M.over || M.busy) return;
-  if (M.phase !== 1) return toast('دوّر أحد المربعات أولاً، التدوير إلزامي');
   const i = +v;
+  if (M.phase === 2 && i === M.last && !locked()) { M.b[i] = 0; M.n--; M.last = -1; M.phase = 1; tone(380, 260, .08); paint(); upd(); return; }
+  if (M.phase !== 1) return toast('دوّر أحد المربعات أولاً، التدوير إلزامي');
   if (M.b[i]) { const c = CE[i]; c.classList.remove('shake'); void c.offsetWidth; c.classList.add('shake'); vib([30, 40, 30]); return toast('هذه الخانة مشغولة'); }
   doPlace(i);
 };
@@ -1402,11 +1498,32 @@ X.help = () => {
 };
 X.hx = () => { const o = $('#pnh'); if (o) o.remove(); };
 
+// تدوير بالسحب: المربع يتبع إصبعك ثم يثبت على أقرب 90 درجة
+function dragInit() {
+  let g = null;
+  const ang = (e, r) => Math.atan2(e.clientY - r.top - r.height / 2, e.clientX - r.left - r.width / 2) * 57.2958;
+  const ok = () => M && !M.over && !M.busy && M.phase === 2 && !locked();
+  pn.addEventListener('pointerdown', e => {
+    const el = e.target.closest('.pnq'); if (!el || !ok()) return;
+    g = {q: QE.indexOf(el), el, r: el.getBoundingClientRect(), a: 0, d: 0, x: e.clientX, y: e.clientY, on: 0, id: e.pointerId};
+  });
+  pn.addEventListener('pointermove', e => {
+    if (!g || e.pointerId !== g.id) return;
+    if (!g.on) { if (Math.hypot(e.clientX - g.x, e.clientY - g.y) < 8) return; g.on = 1; g.a = ang({clientX: g.x, clientY: g.y}, g.r); g.el.setPointerCapture(e.pointerId); g.el.classList.add('spin'); }
+    const a = ang(e, g.r); g.d = Math.max(-100, Math.min(100, g.d + (a - g.a + 540) % 360 - 180)); g.a = a; setR(g.el, g.d);
+  });
+  const end = e => {
+    if (!g || e.pointerId !== g.id) return; const k = g; g = null; if (!k.on) return;
+    if (Math.abs(k.d) > 28 && ok()) doRotate(k.q, k.d > 0 ? 1 : -1, k.d);
+    else spin(k.el, k.d, 0, 200, () => k.el.classList.remove('spin'));
+  };
+  pn.addEventListener('pointerup', end); pn.addEventListener('pointercancel', end);
+}
 const prev = window.openGame;
 window.openGame = id => {
   if (id !== 'pent') return prev ? prev(id) : toast('قريباً');
   if (!pn) {
-    pn = document.createElement('div'); pn.id = 'pn'; document.body.appendChild(pn);
+    pn = document.createElement('div'); pn.id = 'pn'; document.body.appendChild(pn); dragInit();
     pn.addEventListener('click', e => { const el = e.target.closest('[data-n]'); if (!el) return; vib(10); if (X[el.dataset.n]) X[el.dataset.n](el.dataset.v, el); });
   }
   pn.style.display = 'block'; setup();
