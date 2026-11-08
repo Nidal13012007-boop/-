@@ -7,12 +7,16 @@ const CL = {"أماكن": ["مطار،محطة قطار،ميناء،محطة ح
 const WORDS = Object.fromEntries(Object.entries(CL).map(([n, cs]) => [n, cs.flatMap(c => { const w = c.split('،'); return w.map((x, i) => [x, w.filter((_, j) => j !== i)]); })]));
 // القوائم (الافتراضية تُنسخ مرة واحدة إلى S.bsLists لتصبح قابلة للتعديل)
 const DEF = Object.keys(WORDS).map((n, i) => ({id: 'd' + i, name: n, fav: 0, words: WORDS[n]}));
+const BV = 3; // رقم نسخة الكلمات الافتراضية: ارفعه كلما أضفت كلمات جديدة لتُدمج عند من فتح اللعبة سابقاً
+// يضيف الكلمات الافتراضية الناقصة إلى القوائم الافتراضية الموجودة فقط (لا يحذف ولا يعدّل شيئاً) ويرجع عدد المضاف
+const mergeDef = () => {
+  let n = 0;
+  DEF.forEach(d => { const l = S.bsLists.find(x => x.id === d.id); if (l) d.words.forEach(w => { if (!l.words.some(x => x[0] === w[0])) { l.words.push(JSON.parse(JSON.stringify(w))); n++; } }); });
+  return n;
+};
 const lists = () => {
-  if (!S.bsLists) { S.bsLists = JSON.parse(JSON.stringify(DEF)); S.bsV = 2; save(); }
-  else if (S.bsV !== 2) { // ترقية: دمج الكلمات الجديدة في القوائم الافتراضية دون المساس بتعديلاتك
-    DEF.forEach(d => { const l = S.bsLists.find(x => x.id === d.id); if (l) d.words.forEach(w => { if (!l.words.some(x => x[0] === w[0])) l.words.push(JSON.parse(JSON.stringify(w))); }); });
-    S.bsV = 2; save();
-  }
+  if (!S.bsLists) { S.bsLists = JSON.parse(JSON.stringify(DEF)); S.bsV = BV; save(); }
+  else if (S.bsV !== BV) { mergeDef(); S.bsV = BV; save(); } // ترقية تلقائية دون المساس بتعديلاتك
   return S.bsLists;
 };
 const cfg = {cat:'d0', out:1, timer:0, prob:0};
@@ -213,7 +217,7 @@ B.mk = () => {
 B.le = id => editor(id);
 B.lfav = id => { const l = find(id); l.fav = l.fav ? 0 : 1; save(); listsScreen(); };
 B.ld = (id, el) => twice(el, 'اضغط مرة أخرى لحذف القائمة', () => { S.bsLists = lists().filter(l => l.id !== id); save(); listsScreen(); });
-B.lrs = () => { DEF.forEach(d => { if (!find(d.id)) lists().push(JSON.parse(JSON.stringify(d))); }); save(); listsScreen(); toast('تمت استعادة الافتراضية'); };
+B.lrs = () => { DEF.forEach(d => { if (!find(d.id)) lists().push(JSON.parse(JSON.stringify(d))); }); const n = mergeDef(); save(); listsScreen(); toast(n ? `تمت الاستعادة وإضافة ${n} كلمة ناقصة` : 'تمت استعادة الافتراضية'); };
 B.ws = v => {
   const [id, k] = v.split('|'), i = +k, l = find(id), w = $('#wn').value.trim();
   if (!w) return toast('اكتب الكلمة');
